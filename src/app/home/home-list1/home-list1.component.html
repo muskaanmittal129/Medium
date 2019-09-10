@@ -1,0 +1,25 @@
+<a 
+style="cursor: pointer;"
+[routerLink] = "[index]"
+routerLinkActive = "active"
+
+ class=" clearfix "
+         >
+
+         <span class="pull-left">
+                <img
+                
+                 [src]="blog.imagePath"
+                 alt="" class="img-responsive"
+                 style="max-height: 120px; width: 100px; ">
+            </span>
+
+            
+            <div class="right">
+                <h4 class="list-group-item-heading">{{blog.name}}</h4>
+                <p class="list-group-item-text">{{blog.description}}</p>
+            </div>
+           
+
+        </a> <hr style="margin:10px; visibility: hidden">
+
