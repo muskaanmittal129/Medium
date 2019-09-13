@@ -1,5 +1,10 @@
+.left{
+    
+   float:left;
+    color:black;
+}
+
+
 .right{
     float:left;
-    margin-left: 20px;
-    color:black;
 }

@@ -1,25 +1,44 @@
 <a 
-style="cursor: pointer;"
+style="cursor: pointer; "
 [routerLink] = "[index]"
 routerLinkActive = "active"
 
- class=" clearfix "
-         >
 
-         <span class="pull-left">
-                <img
-                
-                 [src]="blog.imagePath"
-                 alt="" class="img-responsive"
-                 style="max-height: 120px; width: 100px; ">
-            </span>
+ 
+         >
+         <div class="row" style="margin-bottom: 50px;">
+             <div class="col-md-9">
+               
+                <div class="pull-left">
+                       <h3 class="list-group-item-heading" style="color:black;
+                        opacity: .8; font-size:1.5em; font-weight:600 ">{{blog.title}}</h3>
+                       <p class="list-group-item-text" style="color:black; opacity: .6">{{blog.subTitle}}</p><br>
+                       <p class="list-group-item-text" style="color:black;  opacity: .8">{{blog.publisher}}</p>
+                       <p class="list-group-item-text" style="color:black; opacity: .6">{{blog.time}}</p>
+
+                   </div>
+             </div>
+         
+         
+
+         
+             <div class="col-md-3">
+                  <span class="pull-right">
+                    <img
+                    
+                     [src]="blog.imagePath"
+                     alt="" class="img-responsive"
+                     
+                      >
+                </span>
+            </div>
+        </div>
+         
+        
 
             
-            <div class="right">
-                <h4 class="list-group-item-heading">{{blog.name}}</h4>
-                <p class="list-group-item-text">{{blog.description}}</p>
-            </div>
+            
            
 
-        </a> <hr style="margin:10px; visibility: hidden">
+        
 

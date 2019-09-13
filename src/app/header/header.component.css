@@ -1,28 +1,19 @@
+.mynav{
+    box-shadow: 0px 0px 3px grey;
+}
+
+
+
 .medium{
-    padding-left: 80px;
+   
     
-    font-size:2.3em;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; 
-}
-
-.topmargin{
-    margin-top: 12px;
-}
-
-.create{
-    border: 1px solid  #00b33c;
-    border-radius: 5px;
-    margin-top: 11px;
-    height:30px;
-    width:100px;
-    text-align:center;
-    padding-top:3px;
-    cursor: pointer;
+    font-size:2.2em;
+    font-family: 'Times New Roman', Times, serif ;
+    font-weight: bolder;
 }
 
 
-    
 
-    
-
-
+.margin{
+    margin-bottom: 100px;
+}

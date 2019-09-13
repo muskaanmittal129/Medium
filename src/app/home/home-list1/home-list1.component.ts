@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Blog } from '../blog.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -12,10 +13,14 @@ export class HomeList1Component implements OnInit {
   @Input() blog:Blog;
 @Input() index:number; 
 
-  constructor() { }
+  constructor(  private route:ActivatedRoute,
+    private router:Router) { }
 
   ngOnInit() {
   }
+  // navigateToDetailComp(){
+  //   this.router.navigate(['new'],{relativeTo:this.route})
+  // }
 
 }
 

@@ -1,0 +1,13 @@
+.footerLink li {
+    display:inline;
+    padding-left:50px;
+   
+}
+.footerLink{
+    margin-top:30px;
+}
+
+.color{
+    background-color: 	 #1a1a1a;
+    color:white;
+}
