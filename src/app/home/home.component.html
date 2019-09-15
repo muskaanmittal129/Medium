@@ -1,18 +1,70 @@
 <div class="container-fluid">
         <div class="row">
-                
                 <div class="col-md-8">
-                        <app-home-list1 
-                        *ngFor="let blogEl of blogs; let i = index "
-                        [blog]="blogEl" [index]="i"></app-home-list1>
-                    
+                                <div *ngFor="let blog of blogs; index as id ">
+                                                <a 
+                                                
+                                                        
+                                                style="cursor: pointer;
+                                                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif "
+                                                [routerLink] = "['/description',id]"
+                                                routerLinkActive = "active"
+                                                
+                                                
+                                                 
+                                                         >
+                                                         <div class="row" style="margin-bottom: 50px;">
+                                                             <div class="col-md-9">
+                                                               
+                                                                <div class="pull-left">
+                                                                       <h3 class="list-group-item-heading" style="color:black;
+                                                                        opacity: .9; font-size:1.5em; font-weight:600 ">{{blog.title}}</h3>
+                                                                       <p  *ngIf="blog.subTitle"
+                                                                        class="list-group-item-text"
+                                                                         style="color:black;
+                                                                         font-size:1.0.9em;
+                                                                          opacity: .6">{{blog.subTitle}}</p><br>
+                                                                       <p [title]="blog.publisher + ' Joined on blog.publisherJoinedOn '"
+                                                                        class="list-group-item-text"
+                                                                         style="color:black;  opacity: .8">{{blog.publisher}}</p>
+                                                                       <p class="list-group-item-text" style="color:black; opacity: .6">{{blog.time}}</p>
+                                                
+                                                                   </div>  
+                                                             </div>
+                                                         
+                                                         
+                                                
+                                                         
+                                                             <div class="col-md-3">
+                                                                  <span class="pull-right">
+                                                                    <img
+                                                                    
+                                                                     [src]="blog.imagePath"
+                                                                     alt="" class="img-responsive"
+                                                                     
+                                                                      >
+                                                                </span>
+                                                            </div>
+                                                        </div></a>
+                                </div>
+                                       
+                                                 
+                                                
+                                        
+                                                    
+                                                    
+                                                   
+                                        
+                                                
+                                        
+                                        
+                              
+                
                 </div>
+                
+                
 
-                <div class="col-md-1"></div>
-
-                <div class="col-md-3">
-                     <router-outlet></router-outlet>   
-                </div>
+               
         </div>       
             
 

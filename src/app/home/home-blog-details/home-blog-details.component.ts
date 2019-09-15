@@ -22,11 +22,13 @@ export class HomeBlogDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(
-      (params:Params) =>{
+      params => {
         this.id = +params['id'];
         this.blog = this.blogService.getBlogOfIndex(this.id);
       }
-      )
-  }
+      );
+    }
 
-}
+   
+
+} 

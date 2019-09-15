@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Blog } from './blog.model';
 import { BlogService } from './blog.service';
 
@@ -9,14 +9,22 @@ import { BlogService } from './blog.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  blogs: Blog[];
+ 
+  blogs:Blog[]; 
+  
+ 
+        
 
   constructor(private blogService: BlogService,
     private router:Router,
-    private route :ActivatedRoute) { }
+    private route :ActivatedRoute,) { }
 
-  ngOnInit() {
-    this.blogs = this.blogService.getBlogs();
+  ngOnInit() {   
+    
+    
+      
+    
+     this.blogs = this.blogService.getBlogs();
   }
 
 }
