@@ -1,18 +1,84 @@
-exports.getLogin = (req, res, next) => {
-    res.status(200).json({
-        users: [{ username: 'nimish', password: 'wasd' }]
-    });
-};
+const bcrypt = require('bcryptjs');
 
-exports.postLogin = (req, res, next) => {
+const User = require('../models/user');
+
+exports.postSignin = (req, res, next) => {
     const username = req.body.username;
     const password = req.body.password;
-    //Authenticate here
-    res.status(200).json({
-        message: 'Login Successful',
-        user: username,
-        password: password,
-        date: new Date().toDateString(),
-        time: new Date().toTimeString()
-    })
+    User
+        .findOne({ where: { username: username } })
+        .then(user => {
+            if (!user) {
+                return res.status(401).json({
+                    message: 'incorrect username or password'
+                });
+            }
+            bcrypt
+                .compare(password, user.password)
+                .then(doMatch => {
+                    if (!doMatch) {
+                        return res.status(401).json({
+                            message: 'incorrect username or password'
+                        });
+                    }
+                    res.status(200).json({
+                        message: 'signin successful'
+                    });
+                })
+                .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
+};
+
+exports.postSignup = (req, res, next) => {
+    const username = req.body.username;
+    const fname = req.body.fname;
+    const lname = req.body.lname;
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmpassword = req.body.confirmPassword;
+    if (password != confirmpassword) {
+        res.status(409).json({
+            message: 'passwords do not match'
+        });
+    }
+    User
+        .findOne({ where: { email: email } })
+        .then(user => {
+            if (user) {
+                res.status(409).json({
+                    message: 'email already exists'
+                });
+            }
+        })
+        .catch(err => console.log(err));
+    User
+        .findOne({ where: { username: username } })
+        .then(user => {
+            if (user) {
+                res.status(409).json({
+                    message: 'username already exists'
+                });
+            }
+        })
+        .catch(err => console.log(err));
+    bcrypt
+        .hash(password, 12)
+        .then(hashedPassword => {
+            User
+                .create({
+                    username: username,
+                    first_name: fname,
+                    last_name: lname,
+                    email: email,
+                    password: hashedPassword
+                })
+                .then(() => {
+                    res.status(200).json({
+                        message: 'signup successful'
+                    });
+                })
+                .catch(err => console.log(err));
+        })
+        .catch(err => console.log(err));
 };
