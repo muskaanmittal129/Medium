@@ -21,7 +21,7 @@ export class BlogService{
         
          'Mandela SH Jackson', 
          'few hours ago',
-         '18th Oct'
+         'Technology'
         ),
 
 
@@ -32,7 +32,7 @@ export class BlogService{
          
          'Mandela SH Jackson',
          'Jan 7, 2017',
-         '18th Oct'
+         'Current Affairs'
         ),
 
         new Blog('The “Other Side” Is Not Dumb' , 
@@ -42,7 +42,7 @@ export class BlogService{
          
          'Mandela SH Jackson',
          'Jan 7, 2017',
-         '18th Oct'
+         'Creativity'
         ),
 
         new Blog('The “Other Side” Is Not Dumb' , 
@@ -52,8 +52,20 @@ export class BlogService{
          
          'Mandela SH Jackson',
          'Jan 7, 2017',
-         '18th Oct'
+         'Health'
         ),
+
+
+        new Blog('The richest American family hired terrorists to shoot machine guns at sleeping women and children' , 
+        'I have never felt so Black at work',
+         'https://miro.medium.com/focal/7360/4912/45/54/0*Yr-mjmrxmD0QyADD',
+         'I have never felt so Black at work',
+         
+         'Mandela SH Jackson',
+         'Jan 7, 2017',
+         'Current Affairs'
+        ),
+
          
          
          

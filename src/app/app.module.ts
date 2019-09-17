@@ -13,6 +13,9 @@ import { dataStorage } from './storedata.service';
 import { CreateComponent } from './create/create.component';
 import { FooterComponent } from './footer/footer.component';
 import { HomeBlogDetailsComponent } from './home/home-blog-details/home-blog-details.component';
+import { AuthComponent } from './auth/auth.component';
+
+
 
 
 @NgModule({
@@ -24,6 +27,7 @@ import { HomeBlogDetailsComponent } from './home/home-blog-details/home-blog-det
     CreateComponent,
     FooterComponent,
     HomeBlogDetailsComponent,
+    AuthComponent,
    
   ],
 
@@ -34,7 +38,7 @@ import { HomeBlogDetailsComponent } from './home/home-blog-details/home-blog-det
     HttpClientModule,
   ],
 
-  providers: [BlogService,dataStorage],
+  providers: [BlogService, dataStorage],
 
   bootstrap: [AppComponent],
 })

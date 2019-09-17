@@ -9,15 +9,16 @@ import { BlogService } from './blog.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
- 
-  blogs:Blog[]; 
   
+  blogs:Blog[]; 
+ 
  
         
 
   constructor(private blogService: BlogService,
-    private router:Router,
-    private route :ActivatedRoute,) { }
+   
+
+   ) { }
 
   ngOnInit() {   
     
@@ -25,7 +26,10 @@ export class HomeComponent implements OnInit {
       
     
      this.blogs = this.blogService.getBlogs();
+   console.log(this.blogs);
+   
   }
+ 
 
 }
 
