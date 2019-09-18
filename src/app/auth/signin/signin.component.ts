@@ -14,7 +14,7 @@ export class SigninComponent implements OnInit {
 
   constructor(private authService:AuthService,
     private dialogRef:MatDialogRef<GetstartedComponent>,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog) { } 
 
   ngOnInit() {
   }
