@@ -23,6 +23,7 @@ export class SigninComponent implements OnInit {
     // this.router.navigate(['signup'],{relativeTo:this.route});
     const dialogConfig =  new MatDialogConfig();
     dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
     dialogConfig.width = "60%"; 
     this.dialog.open(GetstartedComponent,dialogConfig)
 

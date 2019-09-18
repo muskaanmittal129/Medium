@@ -1,3 +1,10 @@
+<mat-toolbar>
+    <button class="btn-dialog-close" 
+    style="float:right;"
+     mat-stroked-button (click)="onClose()" tabIndex="-1"><mat-icon>clear</mat-icon></button>
+</mat-toolbar>
+
+
 <div class="row" style="font-family: 'Times New Roman', Times, serif">
     <div class="col-md-3"></div>
         <div class="col-md-6">
@@ -39,13 +46,12 @@
                           class="form-control"
                           name ="password"
                           ngModel
-                          [minlength] ='8'
                           required
                           #password = "ngModel">
-                          <span
+                         <span
                           class="help-block"
                           *ngIf="password.touched && password.errors?.required"
-                          style="color:red">Enter minimum 8 characters</span>
+                          style="color:red">Password is required</span> 
                 </div>
 
 

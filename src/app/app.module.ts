@@ -9,7 +9,7 @@ import { HomeComponent } from './home/home.component';
 
 import { BlogService } from './home/blog.service';
 import { HttpClientModule } from '@angular/common/http';
-import { dataStorage } from './storedata.service';
+
 import { CreateComponent } from './create/create.component';
 import { FooterComponent } from './footer/footer.component';
 import { HomeBlogDetailsComponent } from './home/home-blog-details/home-blog-details.component';
@@ -23,9 +23,10 @@ import { CommonModule } from '@angular/common';
 import * as  Material from '@angular/material';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { MaterialModule } from '@angular/material'; 
-// import {MdButtonModule, MdCheckboxModule} from '@angular/material';   
-// import {MdCardModule} from '@angular/material';
+
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule,MatToolbarModule, MatIconModule} from '@angular/material';
+
 
 
 
@@ -60,14 +61,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     Material.MatDialogModule,
     BrowserAnimationsModule,
-    // MaterialModule,
-    // MdButtonModule,
-    // MdCheckboxModule,
-    // MdCardModule,
+    
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    
  
   ],
 
-  providers: [BlogService, dataStorage, AuthService,
+  providers: [BlogService, AuthService,
     { provide: MatDialogRef, useValue: {} },
     { provide: MAT_DIALOG_DATA, useValue: [] }, ],
 
