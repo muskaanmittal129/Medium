@@ -18,16 +18,22 @@
                 
                 
                 <ul class="nav navbar-nav ">
-                <li><a style="color: #00b33c; cursor: pointer;">Sign in</a> </li>
+                <li><button class="btn btn-success"
+                    (click)="onClickSignin()"
+                     style="background-color: transparent;
+                      border:0px solid transparent;
+                     margin-top:8px;"><a style="color: #00b33c;text-decoration: none; " >Sign in</a></button> </li>
                 
                       <li><button class="btn btn-success"
+                       (click)="onClickSignup()"
                         style="background-color: transparent;
-                        color:#00b33c;
-                        margin-top:8px;">Get started</button></li>
-
+                        
+                        margin-top:8px;"><a style="color:#00b33c;
+                        text-decoration: none;" >Get started</a></button></li>
+ 
             </ul> 
             </ul>
-        </div>
+        </div> 
     </div>
 </div>
 

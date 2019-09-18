@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { CreateComponent } from './create/create.component';
 import { HomeBlogDetailsComponent } from './home/home-blog-details/home-blog-details.component';
+import { SigninComponent } from './auth/signin/signin.component';
+import { GetstartedComponent } from './auth/getstarted/getstarted.component';
 
 
 
@@ -19,6 +21,8 @@ const routes: Routes = [
  
  
   {path:'create',component:CreateComponent}, 
+  // {path:'signin',component:SigninComponent}, 
+  // {path:'signup',component:GetstartedComponent}, 
 
 ];
 
