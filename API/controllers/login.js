@@ -36,9 +36,9 @@ exports.postSignup = (req, res, next) => {
     const lname = req.body.lname;
     const email = req.body.email;
     const password = req.body.password;
-    const confirmpassword = req.body.confirmPassword;
-    if (password != confirmpassword) {
-        res.status(409).json({
+    const confirmPassword = req.body.confirmPassword;
+    if (password != confirmPassword) {
+        return res.status(409).json({
             message: 'passwords do not match'
         });
     }
