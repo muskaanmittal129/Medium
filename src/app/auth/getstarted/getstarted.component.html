@@ -1,18 +1,25 @@
-<mat-toolbar>
+<div style="float:right ">
         <button class="btn-dialog-close"
-         mat-stroked-button (click)="onClose()" tabIndex="-1"><mat-icon>clear</mat-icon></button>
-</mat-toolbar>
+        (click)="onClose()" tabIndex="-1">
+         <span style="font-size: 1.4em; opacity: 0.4;">X</span></button>
+</div>
                 
             
 
 
- <div class="row">
-    <div class="col-md-2"></div>
-        <div class="col-md-8">
+ <div   class="row"  style="font-family: 'Times New Roman', Times, serif">
+    
+        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2 ">
+
+                        <h1 style="text-align: center;">Join Medium.</h1>
+                        <p 
+                        style="text-align: center; font-size:1.4em; opacity:0.8">
+                        Create an account to receive great stories in your inbox,
+                         personalize your homepage, and follow authors and topics that you love.</p>
             
 
 
-            <form (ngSubmit)="onSignup(f)" #f="ngForm">
+            <form  style="opacity:0.9" (ngSubmit)="onSignup(f)" #f="ngForm">
                 <div class="form-group">
                         <label for="fname"> First Name</label>
                         <input type="text"
@@ -129,7 +136,7 @@
 
                 <button
                 [disabled]="!f.valid"
-                type="submit" class="mybutton">Get Started</button>
+                type="submit" class=" btn btn-success ">Get Started</button>
 
 
                 
@@ -137,14 +144,20 @@
                         
                
             </form>
-            <p style="text-align:center; margin-top:10px;">Already have an account ?
-                 <button style="background-color: transparent;
-                 border:none;"
+            <p style="text-align:center; margin-top:10px; opacity:0.9">Already have an account ?
+                 <button class="btn" 
                   (click)="navigateToSignin()">
-                  <span style="color: #00b33c;text-decoration: none; ">Sign in</span></button> </p>
+                  <span style="color: #00b33c;text-decoration: none;  "><b>Sign in</b></span></button> </p>
 
-        </div>
-        <div class="col-md-2"></div>
+                  <p style="font-size: 1.1em; opacity:0.9; text-align: center; ">
+                        To make Medium work, we log user data and share it with service providers.
+                                Click “Sign in” above to accept Medium’s 
+                                <span style="text-align: center;  ">
+                                        <a>Terms of Service</a> & <a>Privacy Policy</a>.</span></p>
+    
+
+        </div >
+        
     
 </div> 
 

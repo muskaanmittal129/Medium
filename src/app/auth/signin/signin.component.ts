@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+
 import { NgForm } from '@angular/forms';
 
 import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material';
 import { GetstartedComponent } from '../getstarted/getstarted.component';
+import { ServerService } from 'src/app/services/server.service';
 
 @Component({
   selector: 'app-signin',
@@ -12,7 +13,7 @@ import { GetstartedComponent } from '../getstarted/getstarted.component';
 })
 export class SigninComponent implements OnInit {
 
-  constructor(private authService:AuthService,
+  constructor(private serverService:ServerService,
     private dialogRef:MatDialogRef<GetstartedComponent>,
     private dialog: MatDialog) { } 
 
@@ -20,11 +21,12 @@ export class SigninComponent implements OnInit {
   }
 
   navigateToSignup(){
-    // this.router.navigate(['signup'],{relativeTo:this.route});
+   
     const dialogConfig =  new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
     dialogConfig.width = "60%"; 
+    dialogConfig.height = "90%";
     this.dialog.open(GetstartedComponent,dialogConfig)
 
 
@@ -37,10 +39,16 @@ export class SigninComponent implements OnInit {
   onSignin(form:NgForm){
     console.log(JSON.stringify(form.value));
     const value = form.value;
-    this.authService.signInUser(value.username,value.password )
+    this.serverService.signInUser(value.username,value.password )
     .subscribe(
-      (response) => console.log(response),
-      (error) => console.log(error),
+      (response) => {console.log(response);
+        const tk = response;
+        localStorage.setItem('token', tk.token)
+        alert("Login Successful");},
+
+
+      (error) => {console.log(error),
+        alert("Invalid Inputs. Login again");},
     );
     this.onClose();
 

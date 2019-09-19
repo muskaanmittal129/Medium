@@ -1,5 +1,6 @@
 .mynav{
     box-shadow: 0px 0px 12px #e6e6e6;
+    margin-bottom: 100px;
 }
 
 
@@ -14,8 +15,8 @@
 
 
 
-.margin{
-    margin-bottom: 100px;
+.btn:focus{
+    outline: none;
 }
 
 

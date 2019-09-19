@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material';
 import { SigninComponent } from '../signin/signin.component';
+import { ServerService } from 'src/app/services/server.service';
+
+
 
 
 
@@ -14,8 +17,8 @@ import { SigninComponent } from '../signin/signin.component';
 export class GetstartedComponent implements OnInit {
   
 
-  constructor(private authService:AuthService,
-   
+  constructor(private serverService:ServerService,
+    
     private dialog: MatDialog,
     private dialogRef:MatDialogRef<GetstartedComponent>) { }
 
@@ -26,8 +29,11 @@ export class GetstartedComponent implements OnInit {
   navigateToSignin(){
     // this.router.navigate(['signin'],{relativeTo:this.route});
     const dialogConfig =  new MatDialogConfig();
-    dialogConfig.disableClose = true;
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
+    
     dialogConfig.width = "60%"; 
+    dialogConfig.height = "90%"; 
     this.dialog.open(SigninComponent,dialogConfig)
 
   }
@@ -40,14 +46,23 @@ export class GetstartedComponent implements OnInit {
   onSignup(form:NgForm){
     console.log(JSON.stringify(form.value));
     const value = form.value;
-    this.authService.signUpUser(value.fname, value.lname,value.username, value.email, value.password , value.confirmPassword)
+    this.serverService.signUpUser(value.fname, value.lname,value.username, value.email, value.password , value.confirmPassword)
     .subscribe(
-      (response) => console.log(response),
-      (error) => console.log(error),
+      (response) => {
+        
+        console.log(response);
+        alert("Registration Successful. Sign in and keep the story going.");
+       
+
+      },
+      (error) => {
+        console.log(error),
+        alert("Invalid Inputs. Login again");}
+
     );
     this.onClose();
 
-    form.reset();
+    form.reset(); 
 
     
    

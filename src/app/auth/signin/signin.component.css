@@ -19,6 +19,16 @@ input.ng-invalid.ng-touched{
     border:2px solid red;
 }
 
-.cross{
-    float:right;
+
+.btn-dialog-close{
+    background-color: transparent;
+    border:none;
+    outline: none;
+    width:35px;
+    
+    
+}
+
+.btn:focus{
+    outline: none;
 }

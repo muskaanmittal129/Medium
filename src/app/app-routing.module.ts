@@ -5,6 +5,7 @@ import { CreateComponent } from './create/create.component';
 import { HomeBlogDetailsComponent } from './home/home-blog-details/home-blog-details.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { GetstartedComponent } from './auth/getstarted/getstarted.component';
+import { AuthGuard } from './guard/auth.guard';
 
 
 
@@ -20,7 +21,8 @@ const routes: Routes = [
   },
  
  
-  {path:'create',component:CreateComponent}, 
+  {path:'create',component:CreateComponent, canActivate:[AuthGuard]},
+   
   // {path:'signin',component:SigninComponent}, 
   // {path:'signup',component:GetstartedComponent}, 
 

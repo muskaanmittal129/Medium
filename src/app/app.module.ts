@@ -18,14 +18,16 @@ import { SigninComponent } from './auth/signin/signin.component';
 import { GetstartedComponent } from './auth/getstarted/getstarted.component';
 import{ FormsModule} from '@angular/forms';
 import { ConfirmEqualValidatorDirective } from './shared/confirm-equal-validator.directive';
-import { AuthService } from './auth/auth.service';
+
 import { CommonModule } from '@angular/common';
 import * as  Material from '@angular/material';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatButtonModule,MatToolbarModule, MatIconModule} from '@angular/material';
+import {MatDialogModule, MatDialogContent} from '@angular/material/dialog';
+import { ServerService } from './services/server.service';
+import { AuthGuard } from './guard/auth.guard';
+
 
 
 
@@ -48,6 +50,7 @@ import {MatButtonModule,MatToolbarModule, MatIconModule} from '@angular/material
     SigninComponent,
     GetstartedComponent,
     ConfirmEqualValidatorDirective,
+   
     
    
   ],
@@ -61,18 +64,17 @@ import {MatButtonModule,MatToolbarModule, MatIconModule} from '@angular/material
     CommonModule,
     Material.MatDialogModule,
     BrowserAnimationsModule,
-    
     MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
+   
+
+    
     
  
   ],
 
-  providers: [BlogService, AuthService,
-    { provide: MatDialogRef, useValue: {} },
-    { provide: MAT_DIALOG_DATA, useValue: [] }, ],
+  providers: [BlogService, ServerService,AuthGuard],
+    
+   
 
   bootstrap: [AppComponent],
   entryComponents:[GetstartedComponent, SigninComponent],
