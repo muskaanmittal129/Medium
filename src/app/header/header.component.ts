@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
     const dialogConfig =  new MatDialogConfig();
     dialogConfig.disableClose =false;
     dialogConfig.autoFocus = false;
-    // dialogConfig.scrollStrategy = this.overlay.scrollStrategies.noop();
+    
     dialogConfig.width = "60%"; 
     dialogConfig.height = "90%"; 
     this.dialog.open(GetstartedComponent,dialogConfig,)

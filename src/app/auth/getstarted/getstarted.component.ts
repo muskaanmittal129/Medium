@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material';
 import { SigninComponent } from '../signin/signin.component';
 import { ServerService } from 'src/app/services/server.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 
@@ -15,6 +16,9 @@ import { ServerService } from 'src/app/services/server.service';
   styleUrls: ['./getstarted.component.css']
 })
 export class GetstartedComponent implements OnInit {
+  public errorMsg:any;
+  
+ 
   
 
   constructor(private serverService:ServerService,
@@ -46,21 +50,28 @@ export class GetstartedComponent implements OnInit {
   onSignup(form:NgForm){
     console.log(JSON.stringify(form.value));
     const value = form.value;
-    this.serverService.signUpUser(value.fname, value.lname,value.username, value.email, value.password , value.confirmPassword)
+    this.serverService
+    .signUpUser(value.fname, value.lname,value.username, value.email, value.password , value.confirmPassword)
     .subscribe(
       (response) => {
         
         console.log(response);
-        alert("Registration Successful. Sign in and keep the story going.");
+        
+        alert("Signup successful. Signin to continue");
        
 
       },
-      (error) => {
+      (error:HttpErrorResponse) => {
+       
         console.log(error);
+        this.errorMsg = error.error.message;
+        alert(this.errorMsg || "Server Error");
        }
 
     );
-    this.onClose();
+    
+      this.onClose();
+    
 
     form.reset(); 
 

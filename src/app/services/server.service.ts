@@ -1,20 +1,28 @@
+// import { HttpErrorResponse } from '@angular/common/http';
+// import { Observable } from 'rxjs/Observable';
 
+// import 'rxjs/add/operator/catch';
+// import 'rxjs/add/observable/throw';
 
 import { HttpHeaders, HttpClient} from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
+import { AuthServiceService } from './auth-service.service';
 
 @Injectable()
 export class ServerService{
-    private rootUrl = "https://e3245e57.ngrok.io";
+    private rootUrl = "https://8f83102f.ngrok.io";
 
 
-    constructor(private http:HttpClient){}
+    constructor(private http:HttpClient,
+        private injector:Injector){}
 
         signUpUser(fname:string, lname:string, username:string, email:string, password: string, confirmPassword:string ){
             const headers = new HttpHeaders({'Content-Type':'application/json'})
             console.log(JSON.stringify({fname,lname, username, email,password, confirmPassword}));
             return this.http.post(this.rootUrl+'/signup',JSON.stringify({fname,lname, username, email,password, confirmPassword}),
             {headers:headers});
+            // .catch(this.errorHandler);
+            
         }
 
 
@@ -24,6 +32,23 @@ export class ServerService{
             return this.http.post(this.rootUrl+'/signin',JSON.stringify({username,password}),
             {headers:headers}); 
         }
+
+        // errorHandler(error:HttpErrorResponse){
+        //     return Observable.throw(error.message || "Server Error")
+        //   }
+
+        createBlog(title:string, subTitle:string, imagePath:string, content:string, category: string ){
+            let authService = this.injector.get(AuthServiceService)
+            const headers =  new HttpHeaders().set("Authorization", `Bearer ${authService.getToken()} `);
+            console.log(JSON.stringify({title,subTitle,imagePath,content,category}));
+            return this.http.post(this.rootUrl+'/blog/create',JSON.stringify({title,subTitle,imagePath,content,category}),
+            {headers:headers});
+            
+            
+        }
+
+
+
 
        
 

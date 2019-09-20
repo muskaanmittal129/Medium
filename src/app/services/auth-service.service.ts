@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,5 +20,7 @@ getToken(){
 loggedOut(){
   localStorage.removeItem('token')
 }
+
+
 
 }
