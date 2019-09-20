@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import{MatDialog, MatDialogConfig} from '@angular/material';
 import { GetstartedComponent } from '../auth/getstarted/getstarted.component';
 import { SigninComponent } from '../auth/signin/signin.component';
+import { AuthServiceService } from '../services/auth-service.service';
+
 
 
 @Component({
@@ -10,9 +12,12 @@ import { SigninComponent } from '../auth/signin/signin.component';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+ 
   
 
-  constructor(private dialog: MatDialog,) { }
+  constructor(private dialog: MatDialog,
+ 
+    private authService:AuthServiceService,) { }
 
   ngOnInit() {
   }

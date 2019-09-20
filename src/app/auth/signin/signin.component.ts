@@ -12,6 +12,7 @@ import { ServerService } from 'src/app/services/server.service';
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit {
+  tk :any;
 
   constructor(private serverService:ServerService,
     private dialogRef:MatDialogRef<GetstartedComponent>,
@@ -41,10 +42,10 @@ export class SigninComponent implements OnInit {
     const value = form.value;
     this.serverService.signInUser(value.username,value.password )
     .subscribe(
-      (response) => {console.log(response);
-        const tk = response;
-        localStorage.setItem('token', tk.token)
-        alert("Login Successful");},
+      response => {console.log(response);
+        this.tk = response;
+        localStorage.setItem('token', this.tk.token)
+        alert("Signin Successful");},
 
 
       (error) => {console.log(error),

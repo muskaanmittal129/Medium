@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate} from '@angular/router';
 
-import { ServerService } from '../services/server.service';
+
 import { MatDialog,MatDialogConfig } from '@angular/material';
 import { SigninComponent } from '../auth/signin/signin.component';
+import { AuthServiceService } from '../services/auth-service.service';
 
 
 @Injectable({
@@ -11,13 +12,13 @@ import { SigninComponent } from '../auth/signin/signin.component';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private serverService:ServerService,
+  constructor(private authService:AuthServiceService,
     private dialog: MatDialog,){
 
   }
 
   canActivate():boolean{
-    if(this.serverService.signedIn()){
+    if(this.authService.signedIn()){
       return true;
     }
     else{
@@ -26,7 +27,8 @@ export class AuthGuard implements CanActivate {
       dialogConfig.autoFocus = false;
       dialogConfig.width = "60%"; 
       dialogConfig.height = "90%"; 
-      this.dialog.open(SigninComponent,dialogConfig)
+      this.dialog.open(SigninComponent,dialogConfig);
+      return false;
   
       
     }

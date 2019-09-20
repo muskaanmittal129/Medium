@@ -8,7 +8,7 @@ import { HomeComponent } from './home/home.component';
 
 
 import { BlogService } from './home/blog.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { CreateComponent } from './create/create.component';
 import { FooterComponent } from './footer/footer.component';
@@ -27,6 +27,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatDialogModule, MatDialogContent} from '@angular/material/dialog';
 import { ServerService } from './services/server.service';
 import { AuthGuard } from './guard/auth.guard';
+// import { TokenInterceptorService } from './services/token-interceptor.service';
+import { AuthServiceService } from './services/auth-service.service';
+
+
+
 
 
 
@@ -72,12 +77,17 @@ import { AuthGuard } from './guard/auth.guard';
  
   ],
 
-  providers: [BlogService, ServerService,AuthGuard],
+  providers: [BlogService, ServerService,AuthGuard,AuthServiceService,
+    // {provide: HTTP_INTERCEPTORS,
+    //   useClass:TokenInterceptorService,
+    //   multi:true}
+
+  ],
     
    
-
+ 
   bootstrap: [AppComponent],
-  entryComponents:[GetstartedComponent, SigninComponent],
+  entryComponents:[GetstartedComponent, SigninComponent],  
 })
     
     

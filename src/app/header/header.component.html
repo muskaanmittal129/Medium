@@ -19,17 +19,34 @@
                 
                 <ul class="nav navbar-nav ">
                 <li><button class="btn btn-success"
+                    *ngIf="!authService.signedIn()"
                     (click)="onClickSignin()"
                      style="background-color: transparent;
                       border:0px solid transparent;
-                     margin-top:8px;"><a style="color: #00b33c;text-decoration: none; " >Sign in</a></button> </li>
+                     margin-top:8px;"><a style="color: #00b33c;text-decoration: none; "
+                      >Sign in</a></button> </li>
                 
-                      <li><button class="btn btn-success"
+                      <li><button 
+                        *ngIf="!authService.signedIn()"
+                        class="btn btn-success"
                        (click)="onClickSignup()"
                         style="background-color: transparent;
                        
                         margin-top:8px;"><a style="color:#00b33c;
                         text-decoration: none;" >Get started</a></button></li>
+
+<li><button 
+    *ngIf="authService.signedIn()"
+    (click)="authService.loggedOut()"
+    class="btn btn-success"
+   (click)="onClickSignup()"
+    style="background-color: transparent;
+   
+    margin-top:8px;"><a style="color:#00b33c;
+    text-decoration: none;" >Logout</a></button></li>
+
+
+
  
             </ul> 
             </ul>

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ServerService{
-    private rootUrl = "https://2f9280e1.ngrok.io";
+    private rootUrl = "https://e3245e57.ngrok.io";
 
 
     constructor(private http:HttpClient){}
@@ -25,10 +25,7 @@ export class ServerService{
             {headers:headers}); 
         }
 
-        signedIn(){
-            return !!localStorage.getItem('token');
-        }
-
+       
 
 
        

@@ -56,8 +56,8 @@ export class GetstartedComponent implements OnInit {
 
       },
       (error) => {
-        console.log(error),
-        alert("Invalid Inputs. Login again");}
+        console.log(error);
+       }
 
     );
     this.onClose();
