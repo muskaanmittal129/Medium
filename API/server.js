@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 
 const sequelize = require('./util/database');
 const User = require('./models/user');
+const Blog = require('./models/blog');
 
 const loginRoutes = require('./routes/login');
+const blogRoutes = require('./routes/blogs');
 
 const app = express();
 
@@ -31,8 +33,19 @@ app.use((req, res, next) => {
 });*/
 
 app.use(loginRoutes);
+app.use('/blog', blogRoutes);
+
+app.use((error, req, res, next) => {
+    const status = error.statusCode || 500;
+    res.status(status).json({
+        message: error.message
+    });
+})
+
+User.hasMany(Blog);
 
 sequelize
+    //.sync({force: true})
     .sync()
     .then(() => {
         app.listen(8080);
