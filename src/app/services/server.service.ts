@@ -10,7 +10,7 @@ import { AuthServiceService } from './auth-service.service';
 
 @Injectable()
 export class ServerService{
-    private rootUrl = "https://8f83102f.ngrok.io";
+    private rootUrl = "https://29111851.ngrok.io";
 
 
     constructor(private http:HttpClient,
@@ -39,7 +39,8 @@ export class ServerService{
 
         createBlog(title:string, subTitle:string, imagePath:string, content:string, category: string ){
             let authService = this.injector.get(AuthServiceService)
-            const headers =  new HttpHeaders().set("Authorization", `Bearer ${authService.getToken()} `);
+            const headers = new HttpHeaders({'Content-Type':'application/json', 'Authorization':`Bearer ${authService.getToken()}`});
+     
             console.log(JSON.stringify({title,subTitle,imagePath,content,category}));
             return this.http.post(this.rootUrl+'/blog/create',JSON.stringify({title,subTitle,imagePath,content,category}),
             {headers:headers});

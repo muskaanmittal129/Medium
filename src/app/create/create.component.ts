@@ -10,43 +10,40 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class CreateComponent implements OnInit {
 
-  constructor(private serverService:ServerService) { }
+  constructor(private serverService: ServerService) { }
 
   ngOnInit() {
   }
-  
-  
-    onCreate(form:NgForm){
-      console.log(JSON.stringify(form.value));
-      const value = form.value;
-      this.serverService
-      .createBlog(value.title, value.subTitle,value.imagePath, value.content, value.category)
+
+
+  onCreate(form: NgForm) {
+    console.log(form.value);
+    const value = form.value;
+    this.serverService
+      .createBlog(value.title, value.subTitle, value.imagePath, value.content, value.category)
       .subscribe(
-        (response) => {
-          
+        (response) => { 
           console.log(response);
-          
-          
-         
-  
-        },
-        (error:HttpErrorResponse) => {
-         
+         },
+
+        (error: HttpErrorResponse) => {
           console.log(error);
-          
-         }
-  
+        }
+
+
+
       );
-      
-      
-      
-  
-      form.reset(); 
-  
-      
-     
-    }
+
+
+
+
+
+
+
+
 
   }
+
+}
 
 

@@ -5,6 +5,7 @@ import { NgForm } from '@angular/forms';
 import { MatDialogConfig, MatDialog, MatDialogRef } from '@angular/material';
 import { GetstartedComponent } from '../getstarted/getstarted.component';
 import { ServerService } from 'src/app/services/server.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-signin',
@@ -13,6 +14,7 @@ import { ServerService } from 'src/app/services/server.service';
 })
 export class SigninComponent implements OnInit {
   tk :any;
+  errorMsg:string;
 
   constructor(private serverService:ServerService,
     private dialogRef:MatDialogRef<GetstartedComponent>,
@@ -45,15 +47,23 @@ export class SigninComponent implements OnInit {
       response => {console.log(response);
         this.tk = response;
         localStorage.setItem('token', this.tk.token)
-        alert("Signin Successful");},
+        alert("Signin Successful");
+        this.onClose();
+        form.reset();},
 
 
-      (error) => {console.log(error),
-        alert("Invalid Inputs. Login again");},
+        (error:HttpErrorResponse) => {
+       
+          console.log(error);
+          this.errorMsg = error.error.message;
+          alert(this.errorMsg || "Server Error");
+         
+
+          
+        
+        }  
     );
-    this.onClose();
-
-    form.reset();
+   
 
     
    
