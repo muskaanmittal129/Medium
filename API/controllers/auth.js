@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
+const { validationResult } = require('express-validator/check');
 
 const User = require('../models/user');
 const config = require('../util/config');
@@ -21,25 +22,30 @@ exports.postSignin = (req, res, next) => {
         .findOne({ where: { username: username } })
         .then(user => {
             if (!user) {
-                const error = new Error('incorrect username or password');
+                const error = new Error('Invalid credentials');
+                return next(error);
+            }
+            if(user.verified !== true){
+                const error = new Error('You have not yet verified you e-mail. Please verify your e-mail to continue');
                 return next(error);
             }
             bcrypt
                 .compare(password, user.password)
                 .then(doMatch => {
                     if (!doMatch) {
-                        const error = new Error('incorrect username or password');
+                        const error = new Error('Invalid credentials');
                         return next(error);
                     }
                     const token = jwt.sign({
                         name: `${user.first_name} ${user.last_name}`,
-                        username: user.username
+                        username: user.username,
                     }, config.tokenSecret, {
-                        expiresIn: '1h'
+                        expiresIn: '6h'
                     });
                     res.status(200).json({
                         message: 'signin successful',
-                        token: token
+                        token: token,
+                        username: user.username
                     });
                 })
                 .catch(err => {
@@ -59,10 +65,10 @@ exports.postSignup = (req, res, next) => {
     const lname = req.body.lname;
     const email = req.body.email;
     const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
-    if (password != confirmPassword) {
-        const err = new Error('passwords do not match');
-        return next(err);
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        const error = new Error(errors.array()[0].msg);
+        return next(error);
     }
     User
         .findOne({ where: { email: email } })
@@ -107,7 +113,7 @@ exports.postSignup = (req, res, next) => {
                     })
                     .then(() => {
                         res.status(200).json({
-                            message: 'signup successful'
+                            message: 'Signup was successful. A mail has been sent to your e-mail address. Click on the link to verify your email address'
                         });
                         transporter.sendMail({
                             to: email,
@@ -138,13 +144,13 @@ exports.getVerifyMail = (req, res, next) => {
     User.findOne({ where: { verificationToken: token } })
         .then(user => {
             if (!user) {
-                res.redirect('http://localhost:3000/', 410);
+                res.redirect('http://localhost:4200/', 410);
             }
             user.verified = 1;
             user.verificationToken = null;
             user.save()
                 .then(() => {
-                    res.redirect('http://localhost:3000/', 200);
+                    res.redirect('http://localhost:4200/', 200);
                 })
                 .catch();
         })

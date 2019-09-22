@@ -13,11 +13,10 @@ const Blog = sequelize.define('blog', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    subtitle: {
-        type: Sequelize.STRING,
-        allowNull: false
+    subTitle: {
+        type: Sequelize.STRING
     },
-    imageURL: {
+    imagePath: {
         type: Sequelize.STRING,
         allowNull: false
     },
@@ -31,6 +30,10 @@ const Blog = sequelize.define('blog', {
     },
     category: {
         type: Sequelize.STRING,
+        allowNull: false
+    },
+    date: {
+        type: Sequelize.DATE,
         allowNull: false
     }
 });

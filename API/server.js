@@ -7,6 +7,7 @@ const Blog = require('./models/blog');
 
 const loginRoutes = require('./routes/login');
 const blogRoutes = require('./routes/blogs');
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -20,20 +21,9 @@ app.use((req, res, next) => {
     next();
 });
 
-/*app.use((req, res, next) => {
-    if (!req.user) {
-        return next();
-    }
-    User.findByPk(req.user.id)
-        .then(user => {
-            req.user = user;
-            next();
-        })
-        .catch(err => console.log(err));
-});*/
-
 app.use(loginRoutes);
-app.use('/blog', blogRoutes);
+app.use(blogRoutes);
+app.use('/user', userRoutes);
 
 app.use((error, req, res, next) => {
     const status = error.statusCode || 500;
@@ -45,7 +35,6 @@ app.use((error, req, res, next) => {
 User.hasMany(Blog);
 
 sequelize
-    //.sync({force: true})
     .sync()
     .then(() => {
         app.listen(8080);
