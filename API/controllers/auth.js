@@ -25,7 +25,7 @@ exports.postSignin = (req, res, next) => {
                 const error = new Error('Invalid credentials');
                 return next(error);
             }
-            if(user.verified !== true){
+            if (user.verified !== true) {
                 const error = new Error('You have not yet verified you e-mail. Please verify your e-mail to continue');
                 return next(error);
             }
@@ -37,7 +37,7 @@ exports.postSignin = (req, res, next) => {
                         return next(error);
                     }
                     const token = jwt.sign({
-                        name: `${user.first_name} ${user.last_name}`,
+                        name: `${user.fname} ${user.lname}`,
                         username: user.username,
                     }, config.tokenSecret, {
                         expiresIn: '6h'
@@ -66,7 +66,7 @@ exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
+    if (!errors.isEmpty()) {
         const error = new Error(errors.array()[0].msg);
         return next(error);
     }
@@ -94,68 +94,78 @@ exports.postSignup = (req, res, next) => {
             const error = new Error(err);
             return next(error);
         });
-    crypto.randomBytes(8, (err, buffer) => {
-        if (err) {
-            return next(err);
-        }
-        const token = buffer.toString('hex');
-        bcrypt
-            .hash(password, 12)
-            .then(hashedPassword => {
-                User
-                    .create({
-                        username: username,
-                        first_name: fname,
-                        last_name: lname,
-                        email: email,
-                        password: hashedPassword,
-                        verificationToken: token
-                    })
-                    .then(() => {
-                        res.status(200).json({
-                            message: 'Signup was successful. A mail has been sent to your e-mail address. Click on the link to verify your email address'
-                        });
-                        transporter.sendMail({
-                            to: email,
-                            from: 'medium@siproject.com',
-                            subject: 'Verification Link',
-                            html: `
-                                <p>This email has been used for registration on medium</p>
-                                <p>Click the link given below to verify your email address</p>
-                                <p>This verfication link is valid only for 1 day</p>
-                                <a href="https://29111851.ngrok.io/verify-mail/${token}">https://29111851.ngrok.io/verify-mail/${token}</a>
-                            `
-                        })
-                    })
-                    .catch(err => {
-                        const error = new Error(err);
-                        return next(error);
-                    });
-            })
-            .catch(err => {
-                const error = new Error(err);
-                return next(error);
-            });
-    });
-};
-
-exports.getVerifyMail = (req, res, next) => {
-    const token = req.params.token;
-    User.findOne({ where: { verificationToken: token } })
-        .then(user => {
-            if (!user) {
-                res.redirect('http://localhost:4200/', 410);
-            }
-            user.verified = 1;
-            user.verificationToken = null;
-            user.save()
-                .then(() => {
-                    res.redirect('http://localhost:4200/', 200);
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    bcrypt
+        .hash(password, 12)
+        .then(hashedPassword => {
+            User
+                .create({
+                    username: username,
+                    fname: fname,
+                    lname: lname,
+                    email: email,
+                    password: hashedPassword,
+                    otp: otp
                 })
-                .catch();
+                .then(() => {
+                    setTimeout(function () {
+                        User.findOne({ where: { username: username } })
+                            .then(user => {
+                                user.otp = null;
+                                return user.save()
+                            })
+                            .then(() => {
+                                res.json({
+                                    message: 'OTP expired'
+                                });
+                            })
+                            .catch(err => {
+                                const error = new Error(err);
+                                return next(error);
+                            });
+                    }, 120000);
+                    res.status(200).json({
+                        message: 'Signup was successful. An OTP has been sent on your e-mail address'
+                    });
+                    transporter.sendMail({
+                        to: email,
+                        from: 'medium@siproject.com',
+                        subject: 'OTP for verification',
+                        html: `
+                                <p>This email has been used for registration on medium</p>
+                                <p>Please enter the OTP given below to verify your mail address</p>
+                                <h2>${otp}</h2>
+                                <p>The OTP will expire in 3 minutes</p>
+                            `
+                    });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
         })
         .catch(err => {
             const error = new Error(err);
             return next(error);
         });
+};
+
+exports.postCheckOTP = (req, res, next) => {
+    const otp = req.body.otp;
+    User.findOne({where: {username: username}})
+    .then(user => {
+        if(user.otp !== otp){
+            const err = new Error('incorrect OTP');
+            return next(err);
+        }
+        user.otp = null;
+        user.verified = true;
+        res.status(200).json({
+            message: 'verification successful'
+        });
+    })
+    .catch(err => {
+        const error = new Error(err);
+        return next(error);
+    });
 };

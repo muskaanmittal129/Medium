@@ -22,7 +22,7 @@ router.post(
         check('confirmPassword')
             .custom((value, { req }) => {
                 if (value !== req.body.password) {
-                    throw new Error('Please enter a valid email address');
+                    throw new Error('Passwords do not match');
                 }
                 return true;
             }),
@@ -35,6 +35,6 @@ router.post(
     ],
     loginController.postSignup
 );
-router.get('/verify-mail/:token', loginController.getVerifyMail);
+router.post('/check-otp', loginController.postCheckOTP);
 
 module.exports = router;

@@ -11,7 +11,7 @@ router.post(
         check('imagePath')
             .custom(value => {
                 if (value == '') {
-                    throw new Error("Title can't be empty");
+                    throw new Error("Image path can't be empty");
                 }
                 return true;
             }),
@@ -25,14 +25,17 @@ router.post(
         check('content')
             .custom(value => {
                 if (value == '') {
-                    throw new Error("Title can't be empty");
+                    throw new Error("Content can't be empty");
                 }
                 return true;
             }),
         check('category')
             .custom(value => {
                 if (value == '') {
-                    throw new Error("Title can't be empty");
+                    throw new Error("Category can't be empty");
+                }
+                if(value !== 'Technology' && value !== 'Creativity' && value !== 'Health' && value !== 'Current Affairs'){
+                    throw new Error("Invalid category")
                 }
                 return true;
             }),
@@ -41,7 +44,44 @@ router.post(
 );
 
 router.get('/home', blogController.getAllBlogs);
-router.post('/blog/delete/:blogId');
-router.post('/blog/edit/:blogId');
+router.get('/blog/edit/:blogId', blogController.getEditBlog);
+router.post(
+    '/blog/edit/:blogId',
+    [
+        check('imagePath')
+            .custom(value => {
+                if (value == '') {
+                    throw new Error("Image path can't be empty");
+                }
+                return true;
+            }),
+        check('title')
+            .custom(value => {
+                if (value == '') {
+                    throw new Error("Title can't be empty");
+                }
+                return true;
+            }),
+        check('content')
+            .custom(value => {
+                if (value == '') {
+                    throw new Error("Content can't be empty");
+                }
+                return true;
+            }),
+        check('category')
+            .custom(value => {
+                if (value == '') {
+                    throw new Error("Category can't be empty");
+                }
+                if(value !== 'Technology' && value !== 'Creativity' && value !== 'Health' && value !== 'Current Affairs'){
+                    throw new Error("Invalid category")
+                }
+                return true;
+            }),
+    ],
+    blogController.postEditBlog
+);
+router.post('/blog/delete/:blogId', blogController.postDeleteBlog);
 
 module.exports = router;

@@ -14,11 +14,11 @@ const User = sequelize.define('user', {
         allowNull: false,
         unique: true
     },
-    first_name: {
+    fname: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    last_name: {
+    lname: {
         type: Sequelize.STRING,
         allowNull: false
     },
@@ -31,13 +31,12 @@ const User = sequelize.define('user', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    verificationToken: {
-        type: Sequelize.STRING,
-        unique: true
-    },
     verified: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0
+    },
+    otp: {
+        type: Sequelize.INTEGER
     }
 });
 

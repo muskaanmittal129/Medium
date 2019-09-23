@@ -1,12 +1,12 @@
 const express = require('express');
+const { check } = require('express-validator/check');
 
 const userController = require('../controllers/user.js');
 
 const router = express.Router();
 
-router.get('/:username', userController.getUser);
-router.get('/edit-profile', userController.getEditUser);
-router.post('/edit-profile', userController.postEditUser);
+router.post('/change-password', userController.postChangePassword);
 router.post('/delete-profile', userController.postDeleteUser);
+router.get('/', userController.getUser);
 
 module.exports = router;
