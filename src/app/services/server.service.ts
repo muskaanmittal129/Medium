@@ -10,7 +10,7 @@ import { AuthServiceService } from './auth-service.service';
 
 @Injectable()
 export class ServerService{
-    private rootUrl = "https://29111851.ngrok.io";
+    private rootUrl = "https://c37722f8.ngrok.io";
 
 
     constructor(private http:HttpClient,
@@ -46,6 +46,32 @@ export class ServerService{
             {headers:headers});
             
             
+        }
+
+        getCreateBlog(){
+            return this.http.get(this.rootUrl+'/home');
+        }
+
+        getMyBlogs(){
+            const token = localStorage.getItem('token');
+            const headers = new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer `+token,
+
+            })
+            return this.http.get(this.rootUrl+'/user', {headers:headers});
+
+        }
+
+        editBlog(){ const token = localStorage.getItem('token');
+        const blogID = localStorage.getItem('blogID');
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer `+token,
+
+        })
+        return this.http.get(this.rootUrl+'/blog/edit/'+blogID, {headers:headers});
+
         }
 
 

@@ -5,6 +5,8 @@ import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material';
 import { SigninComponent } from '../signin/signin.component';
 import { ServerService } from 'src/app/services/server.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { NgClass } from '@angular/common';
+
 
 
 
@@ -17,7 +19,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class GetstartedComponent implements OnInit {
   public errorMsg:string;
-  
+  public errUsername =false;
+  public errEmail =false;
+  public errConfirmPassword =false;
+  public resp:any;
  
   
 
@@ -56,8 +61,9 @@ export class GetstartedComponent implements OnInit {
       (response) => {
         
         console.log(response);
+        this.resp = response;
        
-        alert("Signup successful. Signin to continue");
+        alert(this.resp.message);
          this.onClose();
         form.reset(); 
         
@@ -71,7 +77,10 @@ export class GetstartedComponent implements OnInit {
         alert(this.errorMsg || "Server Error");
 
         if(this.errorMsg === "username already exists"){
-          form.controls.username.reset();
+          form.controls.username.reset() ;
+          this.errUsername =  true;
+         
+           
           
           
           
@@ -79,9 +88,11 @@ export class GetstartedComponent implements OnInit {
         }
         if(this.errorMsg === "email is already registered"){
           form.controls.email.reset();
+          this.errEmail =  true;
         }
         if(this.errorMsg === "passwords do not match"){
           form.controls.confirmPassword.reset();
+          this.errConfirmPassword =  true;
         }
        }
 

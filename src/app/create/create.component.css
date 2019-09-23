@@ -1,0 +1,12 @@
+.form{
+    padding:50px;
+    box-shadow: 1px 1px 5px grey;
+}
+
+input.ng-invalid.ng-touched{
+    border:2px solid red;
+}
+
+textarea.ng-invalid.ng-touched{
+    border:2px solid red;
+}

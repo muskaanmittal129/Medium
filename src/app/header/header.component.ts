@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import{MatDialog, MatDialogConfig} from '@angular/material';
 import { GetstartedComponent } from '../auth/getstarted/getstarted.component';
 import { SigninComponent } from '../auth/signin/signin.component';
 import { AuthServiceService } from '../services/auth-service.service';
+import { Router } from '@angular/router';
+import { BlogService } from '../home/blog.service';
 
 
 
@@ -13,15 +15,21 @@ import { AuthServiceService } from '../services/auth-service.service';
 })
 export class HeaderComponent implements OnInit {
  
-  
+  extractUser:string;
+  @Input() usname:string;
+ 
+
 
   constructor(private dialog: MatDialog,
  
-    private authService:AuthServiceService,) { }
+    private authService:AuthServiceService,
+    private router:Router,
+    private blogService:BlogService) { }
 
   ngOnInit() {
+  
   }
-
+  
   onClickSignup(){
     const dialogConfig =  new MatDialogConfig();
     dialogConfig.disableClose =false;
@@ -29,7 +37,8 @@ export class HeaderComponent implements OnInit {
     
     dialogConfig.width = "60%"; 
     dialogConfig.height = "90%"; 
-    this.dialog.open(GetstartedComponent,dialogConfig,)
+    this.dialog.open(GetstartedComponent,dialogConfig,);
+    
 
   }
 
@@ -39,11 +48,18 @@ export class HeaderComponent implements OnInit {
     dialogConfig.autoFocus = false;
     dialogConfig.width = "60%"; 
     dialogConfig.height = "90%"; 
-    this.dialog.open(SigninComponent,dialogConfig)
+    this.dialog.open(SigninComponent,dialogConfig);
+   
 
   }
 
-  
+  toHomePage(){
+    this.router.navigate(['home']);
+    
+
+  }
+
+
 
 
 }

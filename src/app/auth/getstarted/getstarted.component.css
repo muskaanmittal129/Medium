@@ -1,8 +1,8 @@
 input.ng-invalid.ng-touched{
     border:2px solid red;
 }
-
-.btn{
+/* 
+.mybutton{
     
     padding:6px 20px ;
     border:2px solid black;
@@ -11,14 +11,14 @@ input.ng-invalid.ng-touched{
     
     
 
-}
+} */
 
-.btn:hover{
+/* .mybutton:hover{
     background-color: green;
     color:white;
     border:2px solid green; 
 
-}
+} */
 
 .btn-dialog-close{
     background-color: transparent;
@@ -28,7 +28,11 @@ input.ng-invalid.ng-touched{
     
     
 }
-.btn{background-color: transparent;
+.mybtn{background-color: transparent;
       border:none;}
-.btn:focus {outline:none !important}
+.mybtn:focus {outline:none !important}
 
+.has-error{
+    border:2px solid red;
+
+}

@@ -1,0 +1,92 @@
+<!-- <h2>{{uName}}</h2> -->
+<h3>{{fName+lName}}</h3>
+<p>{{uName}}</p>
+<p>{{email}}</p><hr>
+<div class="container-fluid" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ">
+    <div class="row">
+       <div class="col-md-8">
+ 
+ 
+ 
+         
+           
+         
+ 
+             <div *ngFor="let blog of blogs; index as id; ">
+                
+               
+               <div>
+                  
+                 
+                   
+                   <a style="cursor: pointer;"
+                 
+                   [routerLink] = "['/description',id]"
+                   routerLinkActive = "active">
+    
+                   <div class="row" style="margin-bottom: 50px;">
+                      <div class="col-md-9">
+                        
+                        
+                         <div class="pull-left">
+                                <h3 class="list-group-item-heading" style="color:black;
+                                 opacity: .9; font-size:1.5em; font-weight:600 ">{{blog.title}}</h3>
+                                <p  *ngIf="blog.subTitle"
+                                 class="list-group-item-text"
+                                  style="color:black;
+                                  font-size:1.0.9em;
+                                   opacity: .6">{{blog.subTitle}}</p><br>
+                                <p
+                                 class="list-group-item-text"
+                                  style="color:black;  opacity: .8">{{blog.publisher}}</p>
+                                
+                                    <p class="list-group-item-text" style="color:black; float:left; opacity: .6">{{blog.date}}</p>
+                                    <div class="row" style="float:left;margin-left:24em;">
+                                        <a routerLink="/edit"><span class="glyphicon glyphicon-pencil" style="margin-right:20px; color:black; opacity:0.6"></span></a>
+                                        <a  routerLink="/delete"><span class="glyphicon glyphicon-trash" style=" color:black; opacity:0.6"></span></a></div>
+                                </div>
+         
+                             
+                      </div>
+                  
+                  
+         
+                  
+                      <div class="col-md-3">
+                           <span class="pull-right">
+                             <img
+                             
+                              [src]="blog.imagePath"
+                              alt="" class="img-responsive"
+                              
+                               >
+                         </span>
+                         
+                       </div>
+                       </div>
+                       </a>
+    
+               </div>
+ 
+                
+             </div>
+             
+        
+           
+          
+            
+             
+        </div>
+      </div>
+  </div>
+                    
+ 
+ 
+                                       
+                                               
+                                      
+                                                       
+                                                   
+                                               
+       
+  

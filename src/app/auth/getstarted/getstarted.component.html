@@ -28,13 +28,14 @@
                           class="form-control"
                           placeholder="first name"
                           name ="fname"
+                         pattern="[a-zA-Z ]*"
                           ngModel
                           required
                           #fname = "ngModel">
                           <span
                           class="help-block"
                           *ngIf="!fname.valid && fname.touched"
-                          style="color:red">First Name is required</span>
+                          style="color:red">Enter valid First Name</span>
                 </div>
 
                 <div class="form-group">
@@ -44,13 +45,14 @@
                           class="form-control"
                           placeholder="last name"
                           name ="lname"
+                         pattern="[a-zA-Z ]*"
                           ngModel
                           required
                           #lname = "ngModel">
                           <span
                           class="help-block"
                           *ngIf="!lname.valid && lname.touched"
-                          style="color:red">Last Name is required</span>
+                          style="color:red">enter valid Last Name</span>
 
                           
                          
@@ -61,6 +63,7 @@
                 <div class="form-group">
                         <label for="username"> Username</label>
                         <input type="text"
+                        [class.has-error] = errUsername
                         placeholder="username"
                          id="username"
                           class="form-control"
@@ -78,6 +81,7 @@
                 <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email"
+                        [class.has-error] = errEmail
                          id="email"
                           class="form-control"
                           placeholder="email"
@@ -115,6 +119,7 @@
                 <div class="form-group">
                         <label for="confirmPassword"> Confirm Password</label>
                         <input type="password"
+                        [class.has-error] = errConfirmPassword
                         appConfirmEqualValidator="password"
                         placeholder="confirm password"
                          id="confirmPassword"
@@ -135,9 +140,9 @@
                           style="color:red">Password and Confirm Password doesn't match</span>
                 </div>
 
-                <button
+                <div style="text-align: center"><button
                 [disabled]="!f.valid"
-                type="submit" class=" btn btn-success ">Get Started</button>
+                type="submit" class="btn btn-success">Get Started</button></div>
 
 
                 
@@ -145,8 +150,8 @@
                         
                
             </form>
-            <p style="text-align:center; margin-top:10px; opacity:0.9">Already have an account ?
-                 <button class="btn" 
+            <p style="text-align:center; margin:10px 0 30px 0; opacity:0.9">Already have an account ?
+                 <button class="mybtn" 
                   (click)="navigateToSignin()">
                   <span style="color: #00b33c;text-decoration: none;  "><b>Sign in</b></span></button> </p>
 

@@ -29,6 +29,10 @@ import { ServerService } from './services/server.service';
 import { AuthGuard } from './guard/auth.guard';
 // import { TokenInterceptorService } from './services/token-interceptor.service';
 import { AuthServiceService } from './services/auth-service.service';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { EditBlogComponent } from './edit-blog/edit-blog.component';
+import { DeleteBlogComponent } from './delete-blog/delete-blog.component';
 
 
 
@@ -55,6 +59,10 @@ import { AuthServiceService } from './services/auth-service.service';
     SigninComponent,
     GetstartedComponent,
     ConfirmEqualValidatorDirective,
+    WelcomeComponent,
+    UserProfileComponent,
+    EditBlogComponent,
+    DeleteBlogComponent,
    
     
    

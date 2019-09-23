@@ -1,59 +1,61 @@
-<div  class="navbar  mynav  ">
+<div class="navbar fixed-top mynav ">
     <div class="container">
         <div class="navbar-header">
-            <a  style="color: black;"routerLink="/" class="navbar-brand medium">Medium</a>
+            <a style="color: black;" routerLink="/" class="navbar-brand medium">Medium</a>
 
         </div>
 
         <div class="navbar-default">
-                <ul class="nav navbar-nav">
-                    <li  routerLinkActive="active" [routerLinkActiveOptions] = "{exact:true}"><a  routerLink="/"><span class="glyphicon glyphicon-home" style="padding:5px;"></span>Home</a> </li>
-                    <li routerLinkActive="active"><a routerLink="/create"><span class="glyphicon glyphicon-pencil" style="padding:5px;"></span>Create</a></li>
-    
-                </ul>
+            <ul class="nav navbar-nav">
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><a routerLink="home"><span
+                            style="padding:5px;"></span>Home</a> </li>
+                <li routerLinkActive="active"><a routerLink="/create"><span
+                            style="padding:5px;"></span>Create</a></li>
 
-        
-            
+            </ul>
+
+
+
             <ul class="nav navbar-nav navbar-right">
-                
-                
+
+
                 <ul class="nav navbar-nav ">
-                <li><button class="btn btn-success"
-                    *ngIf="!authService.signedIn()"
-                    (click)="onClickSignin()"
-                     style="background-color: transparent;
+                    <li><button class="btn btn-success" *ngIf="!authService.signedIn()" (click)="onClickSignin()" style="background-color: transparent;
                       border:0px solid transparent;
-                     margin-top:8px;"><a style="color: #00b33c;text-decoration: none; "
-                      >Sign in</a></button> </li>
-                
-                      <li><button 
-                        *ngIf="!authService.signedIn()"
-                        class="btn btn-success"
-                       (click)="onClickSignup()"
-                        style="background-color: transparent;
+                     margin-top:8px;"><a style="color: #00b33c;text-decoration: none; ">Sign in</a></button> </li>
+
+                    <li><button *ngIf="!authService.signedIn()" class="btn btn-success" (click)="onClickSignup()" style="background-color: transparent;
                        
                         margin-top:8px;"><a style="color:#00b33c;
-                        text-decoration: none;" >Get started</a></button></li>
+                        text-decoration: none;">Get started</a></button></li>
 
-<li><button 
-    *ngIf="authService.signedIn()"
-    (click)="authService.loggedOut()"
-    class="btn btn-success"
-   (click)="onClickSignup()"
-    style="background-color: transparent;
+<li><a routerLink='/myProfile' *ngIf="authService.signedIn()"  style="color:#00b33c;
+text-decoration: none;">My Profile</a></li>
+
+                        
+
+                    <li><button *ngIf="authService.signedIn()" (click)="authService.loggedOut()" class="btn btn-success"
+                            (click)="toHomePage()" style="background-color: transparent;
    
     margin-top:8px;"><a style="color:#00b33c;
-    text-decoration: none;" >Logout</a></button></li>
+    text-decoration: none;">Logout</a></button></li>
+
+                            
 
 
 
- 
-            </ul> 
-            </ul>
-        </div> 
-    </div>
-</div>
 
 
         
-         
+
+       
+
+
+
+
+
+                </ul>
+            </ul>
+        </div>
+    </div>
+</div>

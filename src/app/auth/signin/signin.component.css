@@ -1,9 +1,10 @@
-.mybutton{
-    margin:1.7em 0 0 10.4em;
+/* .mybutton{
+    
     padding:6px 20px ;
     border:2px solid black;
     background-color: transparent;
     color:black;
+    
     
 
 }
@@ -13,7 +14,7 @@
     color:white;
     border:2px solid green; 
 
-}
+} */
 
 input.ng-invalid.ng-touched{
     border:2px solid red;
@@ -29,6 +30,6 @@ input.ng-invalid.ng-touched{
     
 }
 
-.btn:focus{
+.mybtn:focus{
     outline: none;
 }
