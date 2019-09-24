@@ -35,6 +35,15 @@ const Blog = sequelize.define('blog', {
     date: {
         type: Sequelize.DATE,
         allowNull: false
+    },
+    time: {
+        type: Sequelize.TINYINT,
+        allowNull: false
+    },
+    claps: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
     }
 });
 

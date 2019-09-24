@@ -12,6 +12,8 @@ exports.postAddBlog = (req, res, next) => {
     const content = req.body.content;
     const category = req.body.category;
     const errors = validationResult(req);
+    const words = count(content);
+    const time = Math.ceil(words / 200);
     if (!errors.isEmpty()) {
         console.log(errors.array()[0].msg);
         const err = new Error(errors.array()[0].msg);
@@ -41,7 +43,8 @@ exports.postAddBlog = (req, res, next) => {
                         category: category,
                         publisher: decoded.name,
                         userId: user.id,
-                        date: date
+                        date: date,
+                        time: time
                     });
                     blog.save()
                         .then(() => {
@@ -176,17 +179,25 @@ exports.postEditBlog = (req, res, next) => {
                     const imagePath = req.body.imagePath;
                     const content = req.body.content;
                     const category = req.body.category;
+                    const words = count(content);
+                    const time = Math.ceil(words / 200);
                     blog.title = title;
                     blog.subTitle = subTitle;
                     blog.imagePath = imagePath;
                     blog.content = content;
                     blog.category = category;
-                    return blog.save();
-                })
-                .then(() => {
-                    res.status(200).json({
-                        message: 'Updated successfully'
-                    });
+                    blog.time = time;
+                    blog.save()
+                        .then(() => {
+                            res.status(200).json({
+                                message: 'Updated successfully'
+                            });
+                        })
+                        .catch(err => {
+                            const error = new Error(err);
+                            return next(error);
+
+                        });
                 })
                 .catch(err => {
                     const error = new Error(err);
@@ -255,3 +266,50 @@ exports.postDeleteBlog = (req, res, next) => {
         return next(err);
     }
 };
+
+exports.postClap = (req, res, next) => {
+    const blogId = req.params.blogId;
+    let token = req.headers['authorization'];
+    token = token.slice(7, token.length);
+    if (token) {
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            Blog.findOne({ where: { id: blogId } })
+                .then(blog => {
+                    if (!blog) {
+                        const err = new Error('Blog not found');
+                        return next(err);
+                    }
+                    blog.claps = blog.claps + 1;
+                    blog.save()
+                        .then(() => {
+                            res.json({
+                                message: "Clap registered"
+                            });
+                        })
+                        .catch(err => {
+                            const error = new Error(err);
+                            return next(error);
+                        });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        });
+    }
+    else {
+        const err = new Error('Token not provided');
+        return next(err);
+    }
+};
+
+function count(s) {
+    s = s.trim();
+    s = s.replace(/[ ]{2,}/gi, " ");
+    s = s.replace(/\n /, "\n");
+    return s.split(' ').filter(String).length + 1;
+}

@@ -12,13 +12,21 @@ router.post(
         check('email')
             .isEmail()
             .withMessage('Please enter a valid email address')
-            .isEmpty()
-            .withMessage('Please enter an e-mail address'),
+            .custom(value => {
+                if (value === "") {
+                    throw new Error('Please enter an email address');
+                }
+                return true;
+            }),
         check('password')
             .isLength({ min: 8 })
             .withMessage('Password must be 8 characters long')
-            .isEmpty()
-            .withMessage('Please enter an password'),
+            .custom(value => {
+                if (value === "") {
+                    throw new Error('Please enter a password');
+                }
+                return true;
+            }),
         check('confirmPassword')
             .custom((value, { req }) => {
                 if (value !== req.body.password) {
@@ -29,13 +37,21 @@ router.post(
         check('fname')
             .isAlpha()
             .withMessage('Name must contain only alphabets')
-            .isEmpty()
-            .withMessage('Please enter your first name'),
+            .custom(value => {
+                if (value === "") {
+                    throw new Error('Please enter your first name');
+                }
+                return true;
+            }),
         check('lname')
             .isAlpha()
             .withMessage('Name must contain only alphabets')
-            .isEmpty()
-            .withMessage('Please enter your last name'),
+            .custom(value => {
+                if (value === "") {
+                    throw new Error('Please enter your last name');
+                }
+                return true;
+            }),
     ],
     loginController.postSignup
 );
@@ -44,8 +60,12 @@ router.post(
     check('otp')
         .isLength({ min: 6, max: 6 })
         .withMessage('OTP must be 6 characters long')
-        .isEmpty()
-        .withMessage('Enter OTP'),
+        .custom(value => {
+            if (value === "") {
+                throw new Error('Please enter OTP');
+            }
+            return true;
+        }),
     loginController.postCheckOTP
 );
 router.post('/resend-otp', loginController.resendOTP);

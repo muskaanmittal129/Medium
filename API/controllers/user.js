@@ -65,10 +65,7 @@ exports.postDeleteUser = (req, res, next) => {
                         const err = new Error('User not found');
                     }
                     delete_user = user;
-                    return Blog.findAll({ where: { userId: user.id } })
-                })
-                .then(blogs => {
-                    return blogs.destroyAll();
+                    return Blog.destroy({ where: { userId: user.id } })
                 })
                 .then(() => {
                     return delete_user.destroy();

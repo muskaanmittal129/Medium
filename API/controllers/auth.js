@@ -26,7 +26,7 @@ exports.postSignin = (req, res, next) => {
                 const error = new Error('Invalid credentials');
                 return next(error);
             }
-            if (user.verified !== true) {
+            if (user.verified !== 1) {
                 const otp = Math.floor(100000 + Math.random() * 900000);
                 user.otp = otp;
                 user.save()
@@ -49,7 +49,10 @@ exports.postSignin = (req, res, next) => {
                                 });
                         }, 120000);
                         res.status(200).json({
-                            message: 'Your mail is not verified. An OTP has been sent on your e-mail address'
+                            message: 'not verified',
+                            username: username,
+                            password: password,
+                            status: 'signin'
                         });
                         transporter.sendMail({
                             to: user.email,
@@ -167,7 +170,9 @@ exports.postSignup = (req, res, next) => {
                             });
                     }, 120000);
                     res.status(200).json({
-                        message: 'Signup was successful. An OTP has been sent on your e-mail address'
+                        message: 'Signup was successful. An OTP has been sent on your e-mail address',
+                        username: username,
+                        status: 'signup'
                     });
                     transporter.sendMail({
                         to: email,
@@ -194,8 +199,8 @@ exports.postSignup = (req, res, next) => {
 
 exports.postCheckOTP = (req, res, next) => {
     const otp = req.body.otp;
-    const username = req.body.username;
-    const password = req.body.password;
+    const username = req.headers['username'];
+    const password = req.headers['password'];
     if (!password) {
         User.findOne({ where: { username: username } })
             .then(user => {
@@ -284,7 +289,7 @@ exports.resendOTP = (req, res, next) => {
         return next(error);
     }
     const otp = Math.floor(100000 + Math.random() * 900000);
-    const username = req.body.username;
+    const username = req.headers['username'];
     User.findOne({ where: { username: username } })
         .then(user => {
             if (!user) {

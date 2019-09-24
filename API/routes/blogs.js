@@ -9,17 +9,36 @@ router.post(
     '/blog/create',
     [
         check('content')
-            .isEmpty()
-            .withMessage('Please enter some content'),
+            .custom(value => {
+                if (value === "") {
+                    throw new Error('Please enter some content');
+                }
+                return true;
+            }),
         check('title')
-            .isEmpty()
-            .withMessage('Please enter a title'),
+            .custom(value => {
+                if (value === "") {
+                    throw new Error('Please enter a title');
+                }
+                return true;
+            }),
         check('imagePath')
-            .isEmpty()
-            .withMessage('Please enter an image path'),
+            .custom(value => {
+                if (value === "") {
+                    throw new Error('Please enter the path for an image');
+                }
+                return true;
+            }),
         check('category')
-            .isEmpty()
-            .withMessage('Please select a category'),
+            .custom(value => {
+                if (value === "") {
+                    throw new Error('Please select a category');
+                }
+                if (value !== 'Technology' && value !== 'Creativity' && value !== 'Current Affairs' && value !== 'Health') {
+                    throw new Error("Invalid Category");
+                }
+                return true;
+            }),
     ],
     blogController.postAddBlog
 );
@@ -55,11 +74,15 @@ router.post(
                 if (value == '') {
                     throw new Error("Category can't be empty");
                 }
+                if (value !== 'Technology' && value !== 'Creativity' && value !== 'Current Affairs' && value !== 'Health') {
+                    throw new Error("Invalid Category");
+                }
                 return true;
             })
     ],
     blogController.postEditBlog
 );
 router.post('/blog/delete/:blogId', blogController.postDeleteBlog);
+router.post('/blog/clap/:blogId', blogController.postClap);
 
 module.exports = router;
