@@ -3,7 +3,7 @@ import { BlogService } from '../home/blog.service';
 import { ServerService } from '../services/server.service';
 import { Blog } from '../home/blog.model';
 import { AuthServiceService } from '../services/auth-service.service';
-import { UserDetail } from '../shared/user-detail.model';
+
 import { Router, Params, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -15,12 +15,13 @@ export class UserProfileComponent implements OnInit {
   uName:string;
   res:any;
   blogs:Blog[]
-  udetail:UserDetail[];
+  
   fName:string;
   lName:string;
   email:string;
-  blog:Blog;
-  index:number;
+  // blogID:number;
+  id:number;
+  
   
 
   
@@ -34,12 +35,12 @@ export class UserProfileComponent implements OnInit {
     private route:ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      params => {
-        this.index = +params['id'];
-        this.blog = this.blogService.getBlogOfIndex(this.index);
-      }
-      );
+    // this.route.params.subscribe(
+    //   params => {
+    //     this.index = +params['id'];
+    //     this.blog = this.blogService.getBlogOfIndex(this.index);
+    //   }
+    //   );
 
     // this.uName = this.blogService.users;
     // this.uName=  this.authService.getUsername();
@@ -52,15 +53,20 @@ export class UserProfileComponent implements OnInit {
         console.log(this.res.blogs);
         this.blogs = this.res.blogs;
         this.blogService.setBlog(this.blogs);
+      //   this.blogId = this.res.blogs.title;
+      console.log(this.blogs); 
+     
+      
+        
+      
+        
+        this.fName = this.res.user.fname; 
+        this.lName = this.res.user.lname;
+        this.email = this.res.user.email;
+        this.uName = this.res.user.username;
        
-        this.udetail = this.res.user;
-        
-        this.fName = this.udetail.fname;
-        this.lName = this.udetail.lname;
-        this.email = this.udetail.email;
-        this.uName = this.udetail.username;
-        localStorage.setItem('blogID', this.blogs[this.index].id);
-        
+        console.log(this.res.blogs[this.blogService.blogID].id);
+          localStorage.setItem('blogID',this.res.blogs[this.blogService.blogID].id );
         
 
       },

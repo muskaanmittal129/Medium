@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 
 export class BlogService{
     blogChanged = new Subject<Blog[]>();
+    blogID:number;
 
     
      
@@ -98,13 +99,20 @@ setBlog(blog:Blog[]){
 setUsername(user:string){
     console.log(user);
     this.users = user;
-    console.log(this.users);
+    console.log(this.users);}
     
     
     // this.blogs = blog;
     // this.blogChanged.next(this.blogs);
 
+    getBlogId(id:number){
+        this.blogID = id;
 
+    }
+
+    
 }
 
-}
+
+
+

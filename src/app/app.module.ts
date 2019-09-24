@@ -33,6 +33,11 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditBlogComponent } from './edit-blog/edit-blog.component';
 import { DeleteBlogComponent } from './delete-blog/delete-blog.component';
+import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
+// import { NgxEditorModule } from 'ngx-editor';
+
+// import { AngularFontAwesomeModule } from 'angular-font-awesome';
+// import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 
 
@@ -63,6 +68,7 @@ import { DeleteBlogComponent } from './delete-blog/delete-blog.component';
     UserProfileComponent,
     EditBlogComponent,
     DeleteBlogComponent,
+    VerifyOtpComponent,
    
     
    
@@ -78,6 +84,9 @@ import { DeleteBlogComponent } from './delete-blog/delete-blog.component';
     Material.MatDialogModule,
     BrowserAnimationsModule,
     MatDialogModule,
+    // NgxEditorModule,
+    // AngularFontAwesomeModule,
+    // TooltipModule.forRoot()
    
 
     

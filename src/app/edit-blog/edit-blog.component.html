@@ -8,7 +8,7 @@
            
         </div> -->
         <div class="col-md-6">
-            <form  class="form" (ngSubmit) = "onCreate(f)" #f="ngForm">
+            <form  class="form" (ngSubmit) = "onEdit(f)" #f="ngForm">
                   
                 <div class="row">
                   <div class="col-xs-12">
@@ -21,7 +21,9 @@
                       class="form-control"
                       ngModel
                       required
-                      #title="ngModel">
+                      #title="ngModel"
+                      value = {{bTitle}}>
+
                       <span
                       class="help-block"
                       *ngIf="!title.valid && title.touched"
@@ -42,7 +44,7 @@
                         name="subTitle"
                         class="form-control"
                         ngModel
-                        
+                        value = {{bSubTitle}}
                         >
                         
                       </div>
@@ -63,7 +65,8 @@
                           ngModel
                           required
                           
-                          #imagePath="ngModel">
+                          #imagePath="ngModel"
+                          value = {{bImagePath}}>
                           <span
                           class="help-block"
                           *ngIf="!imagePath.valid && imagePath.touched"
@@ -141,6 +144,7 @@
                               class="form-control"
                               ngModel
                               required
+                              value = {{bContent}}
                               #content="ngModel">Write down your thoughts!</textarea>
                               <span
                               class="help-block"
@@ -156,7 +160,7 @@
                             <button 
                             type="submit"
                             class="btn btn-success"
-                            [disabled]="!f.valid" style="margin-right: 10px;">Create</button>
+                             style="margin-right: 10px;">Edit</button>
                             <button
                             type="button"
                             class="btn btn-success"

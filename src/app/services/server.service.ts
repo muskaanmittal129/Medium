@@ -10,7 +10,7 @@ import { AuthServiceService } from './auth-service.service';
 
 @Injectable()
 export class ServerService{
-    private rootUrl = "https://c37722f8.ngrok.io";
+    private rootUrl = "https://f34d1cf7.ngrok.io";
 
 
     constructor(private http:HttpClient,
@@ -65,13 +65,47 @@ export class ServerService{
 
         editBlog(){ const token = localStorage.getItem('token');
         const blogID = localStorage.getItem('blogID');
+        console.log(blogID);
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer `+token,
 
         })
-        return this.http.get(this.rootUrl+'/blog/edit/'+blogID, {headers:headers});
+        return this.http.get(this.rootUrl+'/blog/edit/'+blogID, {headers:headers})
+        
+        
 
+        }
+
+        postEditBlog(title:string, subTitle:string, imagePath:string, content:string, category: string )
+        { const token = localStorage.getItem('token');
+        const blogID = localStorage.getItem('blogID');
+        console.log(blogID);
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer `+token,
+
+        })
+        return this.http.post(this.rootUrl+'/blog/edit/'+blogID,JSON.stringify({title,subTitle,imagePath,content,category}),
+         {headers:headers})
+        
+        
+
+        }
+
+        verifyOtp(otp:number, username:string){
+            const headers = new HttpHeaders({'Content-Type': 'application/json',})
+            return this.http.post(this.rootUrl+'/check-otp/'+username,
+            JSON.stringify({otp}),
+            {headers:headers});
+        }
+
+        resendOtp(username:string){
+            const headers = new HttpHeaders({'Content-Type': 'application/json',})
+            return this.http.post(this.rootUrl+'/resend-otp/'+username,
+            
+            {headers:headers});
+            
         }
 
 

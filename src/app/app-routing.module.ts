@@ -10,6 +10,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditBlogComponent } from './edit-blog/edit-blog.component';
 import { DeleteBlogComponent } from './delete-blog/delete-blog.component';
+import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
 
 
 
@@ -29,8 +30,9 @@ const routes: Routes = [
  
   {path:'create',component:CreateComponent, canActivate:[AuthGuard]},
   {path:'myProfile',component:UserProfileComponent, canActivate:[AuthGuard]},
-  {path:'edit',component:EditBlogComponent}, 
+  {path:'edit/:id',component:EditBlogComponent}, 
   {path:'delete', component:DeleteBlogComponent}, 
+  {path:'verify/:username', component:VerifyOtpComponent}, 
    
   
 ];

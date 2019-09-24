@@ -1,5 +1,5 @@
 <!-- <h2>{{uName}}</h2> -->
-<h3>{{fName+lName}}</h3>
+<h3>{{fName}} {{lName}}</h3>
 <p>{{uName}}</p>
 <p>{{email}}</p><hr>
 <div class="container-fluid" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ">
@@ -21,16 +21,18 @@
                    
                    <a style="cursor: pointer;"
                  
-                   [routerLink] = "['/description',id]"
-                   routerLinkActive = "active">
+                  >
     
                    <div class="row" style="margin-bottom: 50px;">
                       <div class="col-md-9">
                         
                         
                          <div class="pull-left">
-                                <h3 class="list-group-item-heading" style="color:black;
-                                 opacity: .9; font-size:1.5em; font-weight:600 ">{{blog.title}}</h3>
+                                <h3 class="list-group-item-heading" >
+                                 <a  [routerLink] = "['/description',id]"
+                                     routerLinkActive = "active"
+                                     style="color:black;
+                                 opacity: .9; font-size:1.5em; font-weight:600 ">{{blog.title}}</a></h3>
                                 <p  *ngIf="blog.subTitle"
                                  class="list-group-item-text"
                                   style="color:black;
@@ -41,8 +43,9 @@
                                   style="color:black;  opacity: .8">{{blog.publisher}}</p>
                                 
                                     <p class="list-group-item-text" style="color:black; float:left; opacity: .6">{{blog.date}}</p>
+                                    <p class="list-group-item-text" style="color:black; opacity: .6">{{blog.time}} mins read <span class="glyphicon glyphicon-star"></span></p>
                                     <div class="row" style="float:left;margin-left:24em;">
-                                        <a routerLink="/edit"><span class="glyphicon glyphicon-pencil" style="margin-right:20px; color:black; opacity:0.6"></span></a>
+                                        <a [routerLink]="['/edit',id]"><span class="glyphicon glyphicon-pencil" style="margin-right:20px; color:black; opacity:0.6"></span></a>
                                         <a  routerLink="/delete"><span class="glyphicon glyphicon-trash" style=" color:black; opacity:0.6"></span></a></div>
                                 </div>
          
@@ -50,7 +53,7 @@
                       </div>
                   
                   
-         
+                     
                   
                       <div class="col-md-3">
                            <span class="pull-right">
@@ -63,6 +66,8 @@
                          </span>
                          
                        </div>
+
+                       <!-- <p style="display: none">{{blog.id}}</p> -->
                        </div>
                        </a>
     

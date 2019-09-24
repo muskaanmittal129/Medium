@@ -18,7 +18,7 @@ export class HomeBlogDetailsComponent implements OnInit {
 
   constructor(private blogService:BlogService,
     private route:ActivatedRoute,
-    private router:Router) { }
+    ) { }
 
   ngOnInit() {
     this.route.params.subscribe(

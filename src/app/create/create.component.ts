@@ -19,6 +19,7 @@ export class CreateComponent implements OnInit {
 
 
   onCreate(form: NgForm) {
+    
     this.router.navigate(['home']);
     console.log(form.value);
     const value = form.value;

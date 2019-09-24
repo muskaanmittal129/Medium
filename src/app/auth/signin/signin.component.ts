@@ -7,6 +7,7 @@ import { GetstartedComponent } from '../getstarted/getstarted.component';
 import { ServerService } from 'src/app/services/server.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BlogService } from 'src/app/home/blog.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class SigninComponent implements OnInit {
   constructor(private serverService:ServerService,
     private dialogRef:MatDialogRef<GetstartedComponent>,
     private dialog: MatDialog,
-    private blogService:BlogService) { } 
+    private blogService:BlogService,
+    private router:Router,) { } 
 
   ngOnInit() {
    
@@ -61,11 +63,16 @@ export class SigninComponent implements OnInit {
         // this.notify.emit(this.usname);
         localStorage.setItem('token', this.resp.token);
         localStorage.setItem('username', this.resp.username);
+        localStorage.setItem('password', this.resp.password);
         console.log(this.usname);
 
        
         this.blogService.setUsername(this.usname);
         alert("Signin Successful");
+        if(this.resp.message === 'not verified'){
+          alert("You are not verified.An otp has been sent on your email.");
+          this.router.navigate(['/verify', this.resp.username]);
+        }
         this.onClose();
         form.reset();},
 

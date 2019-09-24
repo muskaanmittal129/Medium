@@ -6,6 +6,7 @@ import { SigninComponent } from '../signin/signin.component';
 import { ServerService } from 'src/app/services/server.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgClass } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -23,11 +24,12 @@ export class GetstartedComponent implements OnInit {
   public errEmail =false;
   public errConfirmPassword =false;
   public resp:any;
+  
  
   
 
   constructor(private serverService:ServerService,
-    
+    private router:Router,
     private dialog: MatDialog,
     private dialogRef:MatDialogRef<GetstartedComponent>) { }
 
@@ -62,9 +64,14 @@ export class GetstartedComponent implements OnInit {
         
         console.log(response);
         this.resp = response;
+        console.log( this.resp.username);
+       
+        
        
         alert(this.resp.message);
-         this.onClose();
+        if (this.resp.message ){
+        this.router.navigate(['/verify', this.resp.username]);}
+         this.onClose(); 
         form.reset(); 
         
        
