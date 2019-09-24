@@ -8,37 +8,18 @@ const router = express.Router();
 router.post(
     '/blog/create',
     [
-        check('imagePath')
-            .custom(value => {
-                if (value == '') {
-                    throw new Error("Image path can't be empty");
-                }
-                return true;
-            }),
-        check('title')
-            .custom(value => {
-                if (value == '') {
-                    throw new Error("Title can't be empty");
-                }
-                return true;
-            }),
         check('content')
-            .custom(value => {
-                if (value == '') {
-                    throw new Error("Content can't be empty");
-                }
-                return true;
-            }),
+            .isEmpty()
+            .withMessage('Please enter some content'),
+        check('title')
+            .isEmpty()
+            .withMessage('Please enter a title'),
+        check('imagePath')
+            .isEmpty()
+            .withMessage('Please enter an image path'),
         check('category')
-            .custom(value => {
-                if (value == '') {
-                    throw new Error("Category can't be empty");
-                }
-                if(value !== 'Technology' && value !== 'Creativity' && value !== 'Health' && value !== 'Current Affairs'){
-                    throw new Error("Invalid category")
-                }
-                return true;
-            }),
+            .isEmpty()
+            .withMessage('Please select a category'),
     ],
     blogController.postAddBlog
 );
@@ -74,11 +55,8 @@ router.post(
                 if (value == '') {
                     throw new Error("Category can't be empty");
                 }
-                if(value !== 'Technology' && value !== 'Creativity' && value !== 'Health' && value !== 'Current Affairs'){
-                    throw new Error("Invalid category")
-                }
                 return true;
-            }),
+            })
     ],
     blogController.postEditBlog
 );

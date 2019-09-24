@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport(sendgridTransport({
     }
 }));
 
+
 exports.postSignin = (req, res, next) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -26,32 +27,72 @@ exports.postSignin = (req, res, next) => {
                 return next(error);
             }
             if (user.verified !== true) {
-                const error = new Error('You have not yet verified you e-mail. Please verify your e-mail to continue');
-                return next(error);
-            }
-            bcrypt
-                .compare(password, user.password)
-                .then(doMatch => {
-                    if (!doMatch) {
-                        const error = new Error('Invalid credentials');
+                const otp = Math.floor(100000 + Math.random() * 900000);
+                user.otp = otp;
+                user.save()
+                    .then(() => {
+                        setTimeout(function () {
+                            User.findOne({ where: { username: username } })
+                                .then(user => {
+                                    if (user.otp !== null) {
+                                        user.otp = null;
+                                        return user.save()
+                                    }
+                                    return;
+                                })
+                                .then(() => {
+                                    return;
+                                })
+                                .catch(err => {
+                                    const error = new Error(err);
+                                    return next(error);
+                                });
+                        }, 120000);
+                        res.status(200).json({
+                            message: 'Your mail is not verified. An OTP has been sent on your e-mail address'
+                        });
+                        transporter.sendMail({
+                            to: user.email,
+                            from: 'nimish.noida@gmail.com',
+                            subject: 'OTP for verification',
+                            html: `
+                                <p>This email has been used for registration on medium</p>
+                                <p>Please enter the OTP given below to verify your mail address</p>
+                                <h2>${otp}</h2>
+                                <p>The OTP will expire in 2 minutes</p>
+                            `
+                        });
+                    })
+                    .catch(err => {
+                        const error = new Error(err);
                         return next(error);
-                    }
-                    const token = jwt.sign({
-                        name: `${user.fname} ${user.lname}`,
-                        username: user.username,
-                    }, config.tokenSecret, {
-                        expiresIn: '6h'
                     });
-                    res.status(200).json({
-                        message: 'signin successful',
-                        token: token,
-                        username: user.username
+            }
+            else {
+                bcrypt
+                    .compare(password, user.password)
+                    .then(doMatch => {
+                        if (!doMatch) {
+                            const error = new Error('Invalid credentials');
+                            return next(error);
+                        }
+                        const token = jwt.sign({
+                            name: `${user.fname} ${user.lname}`,
+                            username: user.username,
+                        }, config.tokenSecret, {
+                            expiresIn: '6h'
+                        });
+                        res.status(200).json({
+                            message: 'signin successful',
+                            token: token,
+                            username: user.username
+                        });
+                    })
+                    .catch(err => {
+                        const error = new Error(err);
+                        return next(error);
                     });
-                })
-                .catch(err => {
-                    const error = new Error(err);
-                    return next(error);
-                });
+            }
         })
         .catch(err => {
             const error = new Error(err);
@@ -111,13 +152,14 @@ exports.postSignup = (req, res, next) => {
                     setTimeout(function () {
                         User.findOne({ where: { username: username } })
                             .then(user => {
-                                user.otp = null;
-                                return user.save()
+                                if (user.otp !== null) {
+                                    user.otp = null;
+                                    return user.save()
+                                }
+                                return;
                             })
                             .then(() => {
-                                res.json({
-                                    message: 'OTP expired'
-                                });
+                                return;
                             })
                             .catch(err => {
                                 const error = new Error(err);
@@ -129,13 +171,13 @@ exports.postSignup = (req, res, next) => {
                     });
                     transporter.sendMail({
                         to: email,
-                        from: 'medium@siproject.com',
+                        from: 'nimish.noida@gmail.com',
                         subject: 'OTP for verification',
                         html: `
                                 <p>This email has been used for registration on medium</p>
                                 <p>Please enter the OTP given below to verify your mail address</p>
                                 <h2>${otp}</h2>
-                                <p>The OTP will expire in 3 minutes</p>
+                                <p>The OTP will expire in 2 minutes</p>
                             `
                     });
                 })
@@ -152,20 +194,142 @@ exports.postSignup = (req, res, next) => {
 
 exports.postCheckOTP = (req, res, next) => {
     const otp = req.body.otp;
-    User.findOne({where: {username: username}})
-    .then(user => {
-        if(user.otp !== otp){
-            const err = new Error('incorrect OTP');
-            return next(err);
-        }
-        user.otp = null;
-        user.verified = true;
-        res.status(200).json({
-            message: 'verification successful'
-        });
-    })
-    .catch(err => {
-        const error = new Error(err);
+    const username = req.body.username;
+    const password = req.body.password;
+    if (!password) {
+        User.findOne({ where: { username: username } })
+            .then(user => {
+                if (!user) {
+                    console.log("user not found");
+                    const error = new Error('incorrect username');
+                    return next(error);
+                }
+                if (user.otp !== otp) {
+                    const error = new Error('incorrect OTP');
+                    return next(error);
+                }
+                user.otp = null;
+                user.verified = 1;
+                user.save()
+                    .then(() => {
+                        res.status(200).json({
+                            message: 'verification successful'
+                        });
+                    })
+                    .catch(err => {
+                        const error = new Error(err);
+                        return next(error);
+                    });
+            })
+            .catch(err => {
+                const error = new Error(err);
+                return next(error);
+            });
+    }
+    if (password) {
+        User.findOne({ where: { username: username } })
+            .then(user => {
+                if (!user) {
+                    const error = new Error('invalid credentials');
+                    return next(error);
+                }
+                if (user.otp !== otp) {
+                    const err = new Error('incorrect OTP');
+                    return next(err);
+                }
+                bcrypt
+                    .compare(password, user.password)
+                    .then(doMatch => {
+                        if (!doMatch) {
+                            const error = new Error('invalid credentials');
+                            return next(error);
+                        }
+                        const token = jwt.sign({
+                            name: `${user.fname} ${user.lname}`,
+                            username: user.username,
+                        }, config.tokenSecret, {
+                            expiresIn: '6h'
+                        });
+                        user.otp = null;
+                        user.verified = 1;
+                        user.save()
+                            .then(() => {
+                                res.status(200).json({
+                                    message: 'signin successful',
+                                    token: token,
+                                    username: user.username
+                                });
+                            })
+                            .catch(err => {
+                                const error = new Error(err);
+                                return next(error);
+                            });
+                    })
+                    .catch(err => {
+                        const error = new Error(err);
+                        return next(error);
+                    });
+            })
+            .catch(err => {
+                const error = new Error(err);
+                return next(error);
+            });
+    }
+};
+
+exports.resendOTP = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error(errors.array()[0].msg);
         return next(error);
-    });
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const username = req.body.username;
+    User.findOne({ where: { username: username } })
+        .then(user => {
+            if (!user) {
+                const err = new Error('incorrect username');
+                return next(err);
+            }
+            user.otp = otp;
+            user.save()
+                .then(() => {
+                    setTimeout(function () {
+                        if (user.otp !== null) {
+                            user.otp = null;
+                            user.save()
+                                .then(() => {
+                                    return;
+                                })
+                                .catch(err => {
+                                    const error = new Error(err);
+                                    return next(error);
+                                });
+                        }
+                        return;
+                    }, 120000);
+                    res.json({
+                        message: "otp has been sent"
+                    });
+                    transporter.sendMail({
+                        to: user.email,
+                        from: 'nimish.noida@gmail.com',
+                        subject: 'OTP for verification',
+                        html: `
+                            <p>This email has been used for registration on medium</p>
+                            <p>Please enter the OTP given below to verify your mail address</p>
+                            <h2>${otp}</h2>
+                            <p>The OTP will expire in 2 minutes</p>
+                        `
+                    });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            return next(error);
+        });
 };

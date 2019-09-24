@@ -13,6 +13,7 @@ exports.postAddBlog = (req, res, next) => {
     const category = req.body.category;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log(errors.array()[0].msg);
         const err = new Error(errors.array()[0].msg);
         return next(err);
     }

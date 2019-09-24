@@ -11,14 +11,14 @@ router.post(
     [
         check('email')
             .isEmail()
-            .withMessage('Please enter a valid email address'),
+            .withMessage('Please enter a valid email address')
+            .isEmpty()
+            .withMessage('Please enter an e-mail address'),
         check('password')
-            .custom((value, { req }) => {
-                if (value.length < 8) {
-                    throw new Error('Password must be atlease 8 characters long');
-                }
-                return true;
-            }),
+            .isLength({ min: 8 })
+            .withMessage('Password must be 8 characters long')
+            .isEmpty()
+            .withMessage('Please enter an password'),
         check('confirmPassword')
             .custom((value, { req }) => {
                 if (value !== req.body.password) {
@@ -28,13 +28,26 @@ router.post(
             }),
         check('fname')
             .isAlpha()
-            .withMessage('Name must contain only alphabets'),
+            .withMessage('Name must contain only alphabets')
+            .isEmpty()
+            .withMessage('Please enter your first name'),
         check('lname')
             .isAlpha()
-            .withMessage('Name must contain only alphabets'),
+            .withMessage('Name must contain only alphabets')
+            .isEmpty()
+            .withMessage('Please enter your last name'),
     ],
     loginController.postSignup
 );
-router.post('/check-otp', loginController.postCheckOTP);
+router.post(
+    '/check-otp',
+    check('otp')
+        .isLength({ min: 6, max: 6 })
+        .withMessage('OTP must be 6 characters long')
+        .isEmpty()
+        .withMessage('Enter OTP'),
+    loginController.postCheckOTP
+);
+router.post('/resend-otp', loginController.resendOTP);
 
 module.exports = router;
