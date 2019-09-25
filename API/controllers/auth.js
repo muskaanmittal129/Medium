@@ -1,5 +1,3 @@
-const crypto = require('crypto');
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
@@ -26,9 +24,16 @@ exports.postSignin = (req, res, next) => {
                 const error = new Error('Invalid credentials');
                 return next(error);
             }
-            if (user.verified !== 1) {
+            if (!user.verified) {
                 const otp = Math.floor(100000 + Math.random() * 900000);
-                user.otp = otp;
+                bcrypt.hash(otp, 12)
+                    .then(hashedOTP => {
+                        user.otp = hashedOTP;
+                    })
+                    .catch(err => {
+                        const error = new Error(err);
+                        return next(err);
+                    });
                 user.save()
                     .then(() => {
                         setTimeout(function () {
@@ -48,11 +53,9 @@ exports.postSignin = (req, res, next) => {
                                     return next(error);
                                 });
                         }, 120000);
-                        res.status(200).json({
-                            message: 'not verified',
-                            username: username,
-                            password: password,
-                            status: 'signin'
+                        res.status(401).json({
+                            message: 'Your email is not verified. Enter OTP to continue',
+                            username: username
                         });
                         transporter.sendMail({
                             to: user.email,
@@ -139,6 +142,15 @@ exports.postSignup = (req, res, next) => {
             return next(error);
         });
     const otp = Math.floor(100000 + Math.random() * 900000);
+    let hashedOTP;
+    bcrypt.hash(otp, 12)
+        .then(hashOTP => {
+            hashedOTP = hashOTP;
+        })
+        .catch(err => {
+            const error = new Error(err);
+            return next(err);
+        });
     bcrypt
         .hash(password, 12)
         .then(hashedPassword => {
@@ -149,7 +161,7 @@ exports.postSignup = (req, res, next) => {
                     lname: lname,
                     email: email,
                     password: hashedPassword,
-                    otp: otp
+                    otp: hashedOTP
                 })
                 .then(() => {
                     setTimeout(function () {
@@ -199,87 +211,38 @@ exports.postSignup = (req, res, next) => {
 
 exports.postCheckOTP = (req, res, next) => {
     const otp = req.body.otp;
-    const username = req.headers['username'];
-    const password = req.headers['password'];
-    if (!password) {
-        User.findOne({ where: { username: username } })
-            .then(user => {
-                if (!user) {
-                    console.log("user not found");
-                    const error = new Error('incorrect username');
-                    return next(error);
-                }
-                if (user.otp !== otp) {
-                    const error = new Error('incorrect OTP');
-                    return next(error);
-                }
-                user.otp = null;
-                user.verified = 1;
-                user.save()
-                    .then(() => {
-                        res.status(200).json({
-                            message: 'verification successful'
-                        });
-                    })
-                    .catch(err => {
-                        const error = new Error(err);
-                        return next(error);
-                    });
-            })
-            .catch(err => {
-                const error = new Error(err);
+    const username = req.params.username;
+    User.findOne({ where: { username: username } })
+        .then(user => {
+            if (!user) {
+                console.log("user not found");
+                const error = new Error('incorrect username');
                 return next(error);
-            });
-    }
-    if (password) {
-        User.findOne({ where: { username: username } })
-            .then(user => {
-                if (!user) {
-                    const error = new Error('invalid credentials');
-                    return next(error);
-                }
-                if (user.otp !== otp) {
-                    const err = new Error('incorrect OTP');
-                    return next(err);
-                }
-                bcrypt
-                    .compare(password, user.password)
-                    .then(doMatch => {
-                        if (!doMatch) {
-                            const error = new Error('invalid credentials');
-                            return next(error);
-                        }
-                        const token = jwt.sign({
-                            name: `${user.fname} ${user.lname}`,
-                            username: user.username,
-                        }, config.tokenSecret, {
-                            expiresIn: '6h'
-                        });
-                        user.otp = null;
-                        user.verified = 1;
-                        user.save()
-                            .then(() => {
-                                res.status(200).json({
-                                    message: 'signin successful',
-                                    token: token,
-                                    username: user.username
-                                });
-                            })
-                            .catch(err => {
-                                const error = new Error(err);
-                                return next(error);
-                            });
-                    })
-                    .catch(err => {
-                        const error = new Error(err);
-                        return next(error);
-                    });
-            })
-            .catch(err => {
-                const error = new Error(err);
+            }
+            return bcrypt.compare(otp, user.otp);
+        })
+        .then(doMatch => {
+            if (!doMatch) {
+                const error = new Error('incorrect OTP');
                 return next(error);
-            });
-    }
+            }
+            user.otp = null;
+            user.verified = 1;
+            user.save()
+                .then(() => {
+                    res.status(200).json({
+                        message: 'verification successful'
+                    });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            return next(error);
+        });
 };
 
 exports.resendOTP = (req, res, next) => {
@@ -289,14 +252,21 @@ exports.resendOTP = (req, res, next) => {
         return next(error);
     }
     const otp = Math.floor(100000 + Math.random() * 900000);
-    const username = req.headers['username'];
+    const username = req.params.username;
     User.findOne({ where: { username: username } })
         .then(user => {
             if (!user) {
                 const err = new Error('incorrect username');
                 return next(err);
             }
-            user.otp = otp;
+            bcrypt.hash(otp, 12)
+                .then(hashedOTP => {
+                    user.otp = otp;
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
             user.save()
                 .then(() => {
                     setTimeout(function () {

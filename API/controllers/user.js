@@ -52,8 +52,8 @@ exports.getUser = (req, res, next) => {
 exports.postDeleteUser = (req, res, next) => {
     let delete_user;
     let token = req.headers['authorization'];
-    token = token.slice(7, token.length);
     if (token) {
+        token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
                 const error = new Error(err);
@@ -90,10 +90,10 @@ exports.postDeleteUser = (req, res, next) => {
 exports.postChangePassword = (req, res, next) => {
     let new_user;
     let token = req.headers['authorization'];
-    token = token.slice(7, token.length);
     const newPassword = req.body.newPassword;
     const confirmPassword = req.body.confirmPassword;
     if (token) {
+        token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
                 const error = new Error(err);
@@ -136,3 +136,80 @@ exports.postChangePassword = (req, res, next) => {
         return next(err);
     }
 };
+
+exports.postChangeName = (req, res, next) => {
+    const fname = req.body.fname;
+    const lname = req.body.lname;
+    let token = req.headers['authorization'];
+    if (token) {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            User.findOne({ where: { username: decoded.username } })
+                .then(user => {
+                    if (!user) {
+                        const err = new Error('user not found');
+                    }
+                    user.fname = fname;
+                    user.lname = lname;
+                    return user.save();
+                })
+                .then(() => {
+                    res.json({
+                        message: "Name changed successfully"
+                    });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        })
+    }
+    else {
+        const err = new Error('Token is not provided');
+        return next(err);
+    }
+}
+
+exports.postChangeUsername = (req, res, next) => {
+    const new_username = req.body.username;
+    let token = req.headers['authorization'];
+    if (token) {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            User.findOne({ where: { username: decoded.username } })
+                .then(user => {
+                    if (!user) {
+                        const err = new Error('user not found');
+                        return next(err);
+                    }
+                    user.username = new_username;
+                    user.save()
+                        .then(() => {
+                            res.json({
+                                message: 'username changed successfully'
+                            });
+                        })
+                        .catch(err => {
+                            const error = new Error(err);
+                            return next(error);
+                        });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        })
+    }
+    else {
+        const err = new Error('Token not provided');
+        return next(err);
+    }
+}

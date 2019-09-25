@@ -56,7 +56,7 @@ router.post(
     loginController.postSignup
 );
 router.post(
-    '/check-otp',
+    '/check-otp/:username',
     check('otp')
         .isLength({ min: 6, max: 6 })
         .withMessage('OTP must be 6 characters long')
@@ -68,6 +68,6 @@ router.post(
         }),
     loginController.postCheckOTP
 );
-router.post('/resend-otp', loginController.resendOTP);
+router.post('/resend-otp/:username', loginController.resendOTP);
 
 module.exports = router;
