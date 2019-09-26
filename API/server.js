@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const sequelize = require('./util/database');
 const User = require('./models/user');
 const Blog = require('./models/blog');
+// const Bookmark = require('./models/bookmark');
 
 const loginRoutes = require('./routes/login');
 const blogRoutes = require('./routes/blogs');
@@ -12,7 +13,7 @@ const userRoutes = require('./routes/user');
 const app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -30,9 +31,10 @@ app.use((error, req, res, next) => {
     res.status(status).json({
         message: error.message
     });
-})
+});
 
 User.hasMany(Blog);
+// Blog.belongsToMany(User, { through: Bookmark });
 
 sequelize
     .sync()

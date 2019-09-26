@@ -215,8 +215,9 @@ exports.postDeleteBlog = (req, res, next) => {
     const blogId = req.params.blogId;
     let userId;
     let token = req.headers['authorization'];
-    token = token.slice(7, token.length);
+    console.log(token);
     if (token) {
+        token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
                 const error = new Error(err);
@@ -307,9 +308,37 @@ exports.postClap = (req, res, next) => {
     }
 };
 
+/*exports.postAddBookmark = (req, res, next) => {
+    let token = req.headers['authorization'];
+    if (token) {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            User.findOne({where:{username: decoded.username}})
+            .then(user => {
+                if(!user){
+                    const err = new Error('user not found');
+                    return next(err);
+                }
+            })
+            .catch(err => {
+                const error = new Error(err);
+                return next(error);
+            });
+        });
+    }
+    else {
+        const err = new Error('Token not provided');
+        return next(err);
+    }
+};*/
+
 function count(s) {
     s = s.trim();
-    s = s.replace(/[ ]{2,}/gi, " ");
-    s = s.replace(/\n /, "\n");
+    s = s.replace(/[ ]{2,}/gi, " ");                    //i => case insensitive, g=> global scope
+    s = s.replace(/\n /, "\n");                         //replaces new lines with a space
     return s.split(' ').filter(String).length + 1;
 }

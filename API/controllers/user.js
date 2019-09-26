@@ -213,3 +213,75 @@ exports.postChangeUsername = (req, res, next) => {
         return next(err);
     }
 }
+
+exports.postChangeEmail = (req, res, next) => {
+    const new_email = req.body.email;
+    let token = req.headers['authorization'];
+    if (token) {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            User.findOne({ where: { username: decoded.username } })
+                .then(user => {
+                    if (!user) {
+                        const error = new Error('user not found');
+                        return next(error);
+                    }
+                    const otp = Math.floor(100000 + Math.random() * 900000);
+                    user.verified = false;
+                    user.otp = null;
+                    user.email = new_email;
+                    user.otp = otp;
+                    user.save()
+                        .then(() => {
+                            setTimeout(function () {
+                                User.findOne({ where: { username: decoded.username } })
+                                    .then(user => {
+                                        if (user.otp !== null) {
+                                            user.otp = null;
+                                            return user.save();
+                                        }
+                                        return;
+                                    })
+                                    .then(() => {
+                                        return;
+                                    })
+                                    .catch(err => {
+                                        const error = new Error(err);
+                                        return next(error);
+                                    });
+                            }, 120000);
+                            res.json({
+                                message: 'otp sent'
+                            });
+                            transporter.sendMail({
+                                to: new_email,
+                                from: 'nimish.noida@gmail.com',
+                                subject: 'OTP for verification',
+                                html: `
+                                    <p>This email has been used for registration on medium</p>
+                                    <p>Please enter the OTP given below to verify your mail address</p>
+                                    <h2>${otp}</h2>
+                                    <p>The OTP will expire in 2 minutes</p>
+                                `
+                            });
+                        })
+                        .catch(err => {
+                            const error = new Error(err);
+                            return next(error);
+                        });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        });
+    }
+    else {
+        const err = new Error('Token is not provided');
+        return next(err);
+    }
+}

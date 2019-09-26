@@ -26,14 +26,7 @@ exports.postSignin = (req, res, next) => {
             }
             if (!user.verified) {
                 const otp = Math.floor(100000 + Math.random() * 900000);
-                bcrypt.hash(otp, 12)
-                    .then(hashedOTP => {
-                        user.otp = hashedOTP;
-                    })
-                    .catch(err => {
-                        const error = new Error(err);
-                        return next(err);
-                    });
+                user.otp = otp;
                 user.save()
                     .then(() => {
                         setTimeout(function () {
@@ -142,15 +135,6 @@ exports.postSignup = (req, res, next) => {
             return next(error);
         });
     const otp = Math.floor(100000 + Math.random() * 900000);
-    let hashedOTP;
-    bcrypt.hash(otp, 12)
-        .then(hashOTP => {
-            hashedOTP = hashOTP;
-        })
-        .catch(err => {
-            const error = new Error(err);
-            return next(err);
-        });
     bcrypt
         .hash(password, 12)
         .then(hashedPassword => {
@@ -161,7 +145,7 @@ exports.postSignup = (req, res, next) => {
                     lname: lname,
                     email: email,
                     password: hashedPassword,
-                    otp: hashedOTP
+                    otp: otp
                 })
                 .then(() => {
                     setTimeout(function () {
@@ -219,10 +203,7 @@ exports.postCheckOTP = (req, res, next) => {
                 const error = new Error('incorrect username');
                 return next(error);
             }
-            return bcrypt.compare(otp, user.otp);
-        })
-        .then(doMatch => {
-            if (!doMatch) {
+            if (otp !== user.otp) {
                 const error = new Error('incorrect OTP');
                 return next(error);
             }
@@ -259,14 +240,7 @@ exports.resendOTP = (req, res, next) => {
                 const err = new Error('incorrect username');
                 return next(err);
             }
-            bcrypt.hash(otp, 12)
-                .then(hashedOTP => {
-                    user.otp = otp;
-                })
-                .catch(err => {
-                    const error = new Error(err);
-                    return next(error);
-                });
+            user.otp = otp;
             user.save()
                 .then(() => {
                     setTimeout(function () {
