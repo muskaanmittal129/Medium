@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const sequelize = require('./util/database');
 const User = require('./models/user');
 const Blog = require('./models/blog');
-// const Bookmark = require('./models/bookmark');
+const Bookmark = require('./models/bookmark');
 
 const loginRoutes = require('./routes/login');
 const blogRoutes = require('./routes/blogs');
@@ -34,7 +34,7 @@ app.use((error, req, res, next) => {
 });
 
 User.hasMany(Blog);
-// Blog.belongsToMany(User, { through: Bookmark });
+Blog.belongsToMany(User, { through: Bookmark });
 
 sequelize
     .sync()

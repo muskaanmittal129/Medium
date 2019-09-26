@@ -114,8 +114,8 @@ exports.postSignup = (req, res, next) => {
         .findOne({ where: { email: email } })
         .then(user => {
             if (user) {
-                const err = new Error('email is already registered');
-                return next(err);
+                const error = new Error('email is already registered');
+                return next(error);
             }
         })
         .catch(err => {
@@ -126,8 +126,8 @@ exports.postSignup = (req, res, next) => {
         .findOne({ where: { username: username } })
         .then(user => {
             if (user) {
-                const err = new Error('username already exists');
-                return next(err);
+                const error = new Error('username already exists');
+                return next(error);
             }
         })
         .catch(err => {
@@ -167,20 +167,19 @@ exports.postSignup = (req, res, next) => {
                     }, 120000);
                     res.status(200).json({
                         message: 'Signup was successful. An OTP has been sent on your e-mail address',
-                        username: username,
-                        status: 'signup'
+                        username: username
                     });
-                    transporter.sendMail({
-                        to: email,
-                        from: 'nimish.noida@gmail.com',
-                        subject: 'OTP for verification',
-                        html: `
-                                <p>This email has been used for registration on medium</p>
-                                <p>Please enter the OTP given below to verify your mail address</p>
-                                <h2>${otp}</h2>
-                                <p>The OTP will expire in 2 minutes</p>
-                            `
-                    });
+                    // transporter.sendMail({
+                    //     to: email,
+                    //     from: 'nimish.noida@gmail.com',
+                    //     subject: 'OTP for verification',
+                    //     html: `
+                    //             <p>This email has been used for registration on medium</p>
+                    //             <p>Please enter the OTP given below to verify your mail address</p>
+                    //             <h2>${otp}</h2>
+                    //             <p>The OTP will expire in 2 minutes</p>
+                    //         `
+                    // });
                 })
                 .catch(err => {
                     const error = new Error(err);

@@ -21,7 +21,7 @@ const Blog = sequelize.define('blog', {
         allowNull: false
     },
     content: {
-        type: Sequelize.STRING,
+        type: Sequelize.DataTypes.STRING(10000),
         allowNull: false
     },
     publisher: {

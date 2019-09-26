@@ -91,7 +91,11 @@ exports.postChangePassword = (req, res, next) => {
     let new_user;
     let token = req.headers['authorization'];
     const newPassword = req.body.newPassword;
-    const confirmPassword = req.body.confirmPassword;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error(errors.array()[0].msg);
+        return next(error);
+    }
     if (token) {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
@@ -109,10 +113,6 @@ exports.postChangePassword = (req, res, next) => {
                     if (!doMatch) {
                         const error = new Error('password is incorrect');
                         return next(error);
-                    }
-                    if (newPassword !== confirmPassword) {
-                        const err = new Error('passwords do not match');
-                        return next(err);
                     }
                     return bcrypt.hash(newPassword, 12);
                 })
@@ -141,6 +141,11 @@ exports.postChangeName = (req, res, next) => {
     const fname = req.body.fname;
     const lname = req.body.lname;
     let token = req.headers['authorization'];
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error(errors.array()[0].msg);
+        return next(error);
+    }
     if (token) {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
@@ -177,7 +182,17 @@ exports.postChangeName = (req, res, next) => {
 exports.postChangeUsername = (req, res, next) => {
     const new_username = req.body.username;
     let token = req.headers['authorization'];
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error(errors.array()[0].msg);
+        return next(error);
+    }
     if (token) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error(errors.array()[0].msg);
+        return next(error);
+    }
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
@@ -217,6 +232,11 @@ exports.postChangeUsername = (req, res, next) => {
 exports.postChangeEmail = (req, res, next) => {
     const new_email = req.body.email;
     let token = req.headers['authorization'];
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const error = new Error(errors.array()[0].msg);
+        return next(error);
+    }
     if (token) {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
