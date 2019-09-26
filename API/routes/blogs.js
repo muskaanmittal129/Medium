@@ -84,5 +84,6 @@ router.post(
 );
 router.post('/blog/delete/:blogId', blogController.postDeleteBlog);
 router.post('/blog/clap/:blogId', blogController.postClap);
+router.post('/blog/add-bookmark/:blogId', blogController.postAddBookmark);
 
 module.exports = router;

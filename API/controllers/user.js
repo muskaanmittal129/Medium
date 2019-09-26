@@ -188,11 +188,6 @@ exports.postChangeUsername = (req, res, next) => {
         return next(error);
     }
     if (token) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        const error = new Error(errors.array()[0].msg);
-        return next(error);
-    }
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {

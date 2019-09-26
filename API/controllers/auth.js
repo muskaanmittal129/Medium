@@ -13,7 +13,6 @@ const transporter = nodemailer.createTransport(sendgridTransport({
     }
 }));
 
-
 exports.postSignin = (req, res, next) => {
     const username = req.body.username;
     const password = req.body.password;

@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator/check');
 
 const Blog = require('../models/blog');
+const Bookmark = require('../models/bookmark');
 const User = require('../models/user');
 const config = require('../util/config');
 
@@ -20,8 +21,8 @@ exports.postAddBlog = (req, res, next) => {
         return next(err);
     }
     let token = req.headers['authorization'];
-    token = token.slice(7, token.length);
     if (token) {
+        token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
                 const error = new Error('Token is not valid');
@@ -90,13 +91,13 @@ exports.getEditBlog = (req, res, next) => {
     const blogId = req.params.blogId;
     let userId;
     let token = req.headers['authorization'];
-    token = token.slice(7, token.length);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const err = new Error(errors.array()[0].msg);
         return next(err);
     }
     if (token) {
+        token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
                 const error = new Error(err);
@@ -144,8 +145,8 @@ exports.postEditBlog = (req, res, next) => {
     const blogId = req.params.blogId;
     let userId;
     let token = req.headers['authorization'];
-    token = token.slice(7, token.length);
     if (token) {
+        token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
                 const error = new Error(err);
@@ -271,8 +272,8 @@ exports.postDeleteBlog = (req, res, next) => {
 exports.postClap = (req, res, next) => {
     const blogId = req.params.blogId;
     let token = req.headers['authorization'];
-    token = token.slice(7, token.length);
     if (token) {
+        token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
                 const error = new Error(err);
@@ -308,8 +309,10 @@ exports.postClap = (req, res, next) => {
     }
 };
 
-/*exports.postAddBookmark = (req, res, next) => {
+exports.postAddBookmark = (req, res, next) => {
     let token = req.headers['authorization'];
+    const blogId = req.params.blogId;
+    let current_user, current_blog;
     if (token) {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
@@ -317,24 +320,50 @@ exports.postClap = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({where:{username: decoded.username}})
-            .then(user => {
-                if(!user){
-                    const err = new Error('user not found');
-                    return next(err);
-                }
-            })
-            .catch(err => {
-                const error = new Error(err);
-                return next(error);
-            });
+            User.findOne({ where: { username: decoded.username } })
+                .then(user => {
+                    if (!user) {
+                        const err = new Error('user not found');
+                        return next(err);
+                    }
+                    current_user = user;
+                    return Blog.findByPk(blogId);
+                })
+                .then(blog => {
+                    current_blog = blog;
+                    return Bookmark.findOne({ where: { userId: current_user.id, blogId: current_blog.id } });
+                })
+                .then(bookmark => {
+                    if (bookmark) {
+                        bookmark.destroy({ where: { userId: current_user.id, blogId: current_blog.id } })
+                            .then(() => {
+                                res.json({
+                                    message: 'bookmark removed'
+                                });
+                            })
+                            .catch(err => {
+                                const error = new Error(err);
+                                return next(error);
+                            });
+                    }
+                    else {
+                        current_blog.addUser(current_user);
+                        res.json({
+                            message: 'bookmark added'
+                        });
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
         });
     }
     else {
         const err = new Error('Token not provided');
         return next(err);
     }
-};*/
+};
 
 function count(s) {
     s = s.trim();
