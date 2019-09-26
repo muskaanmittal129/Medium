@@ -30,8 +30,8 @@ const routes: Routes = [
  
   {path:'create',component:CreateComponent, canActivate:[AuthGuard]},
   {path:'myProfile',component:UserProfileComponent, canActivate:[AuthGuard]},
-  {path:'edit/:id',component:EditBlogComponent}, 
-  {path:'delete', component:DeleteBlogComponent}, 
+  {path:'edit/:blogID',component:EditBlogComponent}, 
+   
   {path:'verify/:username', component:VerifyOtpComponent}, 
    
   

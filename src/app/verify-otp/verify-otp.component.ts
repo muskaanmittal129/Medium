@@ -45,7 +45,9 @@ export class VerifyOtpComponent implements OnInit {
         
         console.log(response);
         this.resp = response;
-        this.route.navigate(['/home']);},
+        if(this.resp.message){
+          alert('OTP verified. Login to continue');
+        this.route.navigate(['/home']);}},
 
         (error) => console.log(error)
     );

@@ -17,39 +17,48 @@ export class EditBlogComponent implements OnInit {
   bSubTitle: string;
   bContent: string;
   bImagePath: string;
-  // form:NgForm;
+  blogs: any;
+  blogID: any;
+
+  @ViewChild('f', {static: false}) form:NgForm;
   constructor(private serverService: ServerService,
     private route: ActivatedRoute,
     private blogService: BlogService,
     private router: Router) { }
 
   ngOnInit() {
-    this.route.params.subscribe(
-      params => {
-        this.id = +params['id'];
-        console.log(this.id);
-        this.blogService.getBlogId(this.id);
+     this.blogID = this.route.snapshot.params.blogID;
+     console.log(this.blogID);
+    // this.route.params.subscribe(
+    //   params => {
+    //     this.id = +params[''];
+    //     console.log(this.id);
+        
+    //   }
+    // );
 
-      }
-    );
-    this.serverService.editBlog()
+   
+   
+    this.serverService.editBlog(this.blogID)
       .subscribe(
 
         (response) => {
           this.res = response;
           console.log(this.res.blog);
-          this.bTitle = this.res.blog.title;
-          this.bSubTitle = this.res.blog.subTitle;
-          this.bImagePath = this.res.blog.imagePath;
-          this.bContent = this.res.blog.content;
-          // this.form.setValue({
-          //   title:this.res.blog.title,
-          //   subTitle:this.res.blog.subTitle,
-          //   imagePath:this.res.blog.imagePath,
-          //   content:this.res.blog.content,
-          //   category:this.res.blog.category,
+          
+         
 
-          // })
+          
+          this.form.setValue({
+            title:this.res.blog.title,
+            subTitle:this.res.blog.subTitle,
+            imagePath:this.res.blog.imagePath,
+            content:this.res.blog.content,
+            category:this.res.blog.category,
+
+          })
+
+         
 
 
 
@@ -63,7 +72,7 @@ export class EditBlogComponent implements OnInit {
 
     const value = form.value;
     console.log(value);
-    this.serverService.postEditBlog(value.title, value.subTitle, value.imagePath, value.content, value.category)
+    this.serverService.postEditBlog(value.title, value.subTitle, value.imagePath, value.content, value.category, this.blogID)
       .subscribe(
         (response) => {
           console.log(response);
@@ -77,6 +86,10 @@ export class EditBlogComponent implements OnInit {
 
       );
 
+  }
+
+  onCancel(){
+    this.router.navigate(['myProfile']);
   }
 
 }

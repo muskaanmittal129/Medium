@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./create.component.css']
 })
 export class CreateComponent implements OnInit {
-
+   res:any;
   constructor(private serverService: ServerService,
     private router:Router) { }
 
@@ -20,7 +20,7 @@ export class CreateComponent implements OnInit {
 
   onCreate(form: NgForm) {
     
-    this.router.navigate(['home']);
+   
     console.log(form.value);
     const value = form.value;
     this.serverService
@@ -28,6 +28,11 @@ export class CreateComponent implements OnInit {
       .subscribe(
         (response) => { 
           console.log(response);
+          this.res = response
+          if(this.res.message === "blog created successfully"){
+            this.router.navigate(['home']);
+
+          }
 
          },
 

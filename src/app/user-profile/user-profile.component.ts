@@ -6,6 +6,7 @@ import { AuthServiceService } from '../services/auth-service.service';
 
 import { Router, Params, ActivatedRoute } from '@angular/router';
 
+
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -15,12 +16,15 @@ export class UserProfileComponent implements OnInit {
   uName:string;
   res:any;
   blogs:Blog[]
-  
+  blogAtId:any;
   fName:string;
   lName:string;
   email:string;
   // blogID:number;
+  i:number;
+   j:number;
   id:number;
+ array:number[]=[];
   
   
 
@@ -35,16 +39,7 @@ export class UserProfileComponent implements OnInit {
     private route:ActivatedRoute) { }
 
   ngOnInit() {
-    // this.route.params.subscribe(
-    //   params => {
-    //     this.index = +params['id'];
-    //     this.blog = this.blogService.getBlogOfIndex(this.index);
-    //   }
-    //   );
-
-    // this.uName = this.blogService.users;
-    // this.uName=  this.authService.getUsername();
-    console.log(this.uName);
+  
     this.serverService.getMyBlogs()
     .subscribe(
       (response) => {
@@ -52,21 +47,29 @@ export class UserProfileComponent implements OnInit {
        
         console.log(this.res.blogs);
         this.blogs = this.res.blogs;
+
+        for(this.i=0; this.i<this.blogs.length; this.i++){
+          
+          this.id = this.blogs[this.i].id;
+          
+          console.log(this.id);
+         for(this.j=this.i; this.j<this.i+1; this.j++)
+          {this.array.push(this.id);
+          console.log(this.array);}
+         
+         
+  
+        }  
+
+
         this.blogService.setBlog(this.blogs);
-      //   this.blogId = this.res.blogs.title;
-      console.log(this.blogs); 
      
-      
-        
-      
-        
+      console.log(this.blogs);         
         this.fName = this.res.user.fname; 
         this.lName = this.res.user.lname;
         this.email = this.res.user.email;
         this.uName = this.res.user.username;
-       
-        console.log(this.res.blogs[this.blogService.blogID].id);
-          localStorage.setItem('blogID',this.res.blogs[this.blogService.blogID].id );
+        
         
 
       },
@@ -74,5 +77,27 @@ export class UserProfileComponent implements OnInit {
 
     );
   }
+
+ deleteBlog(id:any){
+   
+  
+   console.log(id)
+
+  this.serverService.DeleteBlog(id)
+    .subscribe(
+      (response) => {
+        console.log(response);
+        this.res = response;
+        this.router.navigate(['/'])
+        
+      },
+      (error) => {console.log(error),
+      this.router.navigate(['/'])},
+
+
+    );
+
+ }
+
 
 }

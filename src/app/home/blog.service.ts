@@ -105,10 +105,10 @@ setUsername(user:string){
     // this.blogs = blog;
     // this.blogChanged.next(this.blogs);
 
-    getBlogId(id:number){
-        this.blogID = id;
+    // getBlogId(id:number){
+    //     this.blogID = id;
 
-    }
+    // }
 
     
 }

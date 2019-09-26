@@ -20,6 +20,7 @@ export class SigninComponent implements OnInit {
   usname:any;
   errorMsg:string;
   resp:any;
+  uName:string;
 
   constructor(private serverService:ServerService,
     private dialogRef:MatDialogRef<GetstartedComponent>,
@@ -63,16 +64,17 @@ export class SigninComponent implements OnInit {
         // this.notify.emit(this.usname);
         localStorage.setItem('token', this.resp.token);
         localStorage.setItem('username', this.resp.username);
-        localStorage.setItem('password', this.resp.password);
+        
         console.log(this.usname);
 
        
         this.blogService.setUsername(this.usname);
-        alert("Signin Successful");
-        if(this.resp.message === 'not verified'){
-          alert("You are not verified.An otp has been sent on your email.");
-          this.router.navigate(['/verify', this.resp.username]);
+        if(this.resp.message === 'signin successful'){
+          alert("Signin Successful");
         }
+       
+        
+        
         this.onClose();
         form.reset();},
 
@@ -81,7 +83,14 @@ export class SigninComponent implements OnInit {
        
           console.log(error);
           this.errorMsg = error.error.message;
+          this.uName =  error.error.username;
           alert(this.errorMsg || "Server Error");
+
+          if(this.errorMsg === 'Your email is not verified. Enter OTP to continue'){
+            this.onClose();
+        form.reset();
+         
+            this.router.navigate(['/verify', this.uName]);}
          
 
           

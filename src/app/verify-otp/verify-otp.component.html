@@ -10,26 +10,30 @@
           name="otp"
           class="form-control"
           ngModel
+          
+          
           required
           #otp="ngModel">
           <span
           class="help-block"
-          *ngIf="!otp.valid && otp.touched"
-          style="color: red;">otp is required</span>
-          <p>otp will expire in 2 minutes</p>
+          *ngIf="!otp.valid && otp.touched && !resend"
+          style="color: red;">OTP is required</span>
+          <p style="opacity: 0.6">OTP will expire in 2 minutes</p>
         </div>
       </div>
     </div>
+    <div *ngIf="!resend">
     <button
     type="submit"
     class="btn btn-success"
-    [disabled]="!f.valid">Verify OTP</button>
-
+    [disabled]="!f.valid" >Verify OTP</button>
+  </div>
     <div
     *ngIf="resend">
     <button
     (click)="onResend()"
-    class="btn btn-primary">Resend OTP</button>
+    class="btn btn-primary"
+    style="margin-left:20px; float:left">Resend OTP</button>
 
 </div>
 

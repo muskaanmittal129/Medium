@@ -1,8 +1,4 @@
-// import { HttpErrorResponse } from '@angular/common/http';
-// import { Observable } from 'rxjs/Observable';
 
-// import 'rxjs/add/operator/catch';
-// import 'rxjs/add/observable/throw';
 
 import { HttpHeaders, HttpClient} from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
@@ -10,7 +6,8 @@ import { AuthServiceService } from './auth-service.service';
 
 @Injectable()
 export class ServerService{
-    private rootUrl = "https://f34d1cf7.ngrok.io";
+    private rootUrl = "https://8497d281.ngrok.io";
+    body:{};
 
 
     constructor(private http:HttpClient,
@@ -63,9 +60,9 @@ export class ServerService{
 
         }
 
-        editBlog(){ const token = localStorage.getItem('token');
-        const blogID = localStorage.getItem('blogID');
-        console.log(blogID);
+        editBlog(blogID:number){ const token = localStorage.getItem('token');
+        
+        
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
             'Authorization': `Bearer `+token,
@@ -77,9 +74,9 @@ export class ServerService{
 
         }
 
-        postEditBlog(title:string, subTitle:string, imagePath:string, content:string, category: string )
+        postEditBlog(title:string, subTitle:string, imagePath:string, content:string, category: string, blogID:number )
         { const token = localStorage.getItem('token');
-        const blogID = localStorage.getItem('blogID');
+        
         console.log(blogID);
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
@@ -93,15 +90,34 @@ export class ServerService{
 
         }
 
+        DeleteBlog( blogID:number)
+        {  
+
+            const token = localStorage.getItem('token');
+            const headers = new HttpHeaders({
+            'Content-Type': 'application/json;charset= UTF-8;',
+            'Authorization': `Bearer `+token,
+            
+        })
+        console.log(headers);
+        
+        return this.http.post(this.rootUrl+'/blog/delete/'+blogID, this.body,
+         {headers:headers})
+        
+        
+
+        }
+
         verifyOtp(otp:number, username:string){
-            const headers = new HttpHeaders({'Content-Type': 'application/json',})
+            const headers = new HttpHeaders({'Content-Type': 'application/json'})
+            console.log(username)
             return this.http.post(this.rootUrl+'/check-otp/'+username,
             JSON.stringify({otp}),
             {headers:headers});
         }
 
         resendOtp(username:string){
-            const headers = new HttpHeaders({'Content-Type': 'application/json',})
+            const headers = new HttpHeaders({'Content-Type': 'application/json'})
             return this.http.post(this.rootUrl+'/resend-otp/'+username,
             
             {headers:headers});

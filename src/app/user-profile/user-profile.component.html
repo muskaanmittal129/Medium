@@ -12,10 +12,10 @@
            
          
  
-             <div *ngFor="let blog of blogs; index as id; ">
+             <div *ngFor="let blog of blogs; index as i;">
                 
                
-               <div>
+               <div >
                   
                  
                    
@@ -29,7 +29,7 @@
                         
                          <div class="pull-left">
                                 <h3 class="list-group-item-heading" >
-                                 <a  [routerLink] = "['/description',id]"
+                                 <a  [routerLink] = "['/description',i]"
                                      routerLinkActive = "active"
                                      style="color:black;
                                  opacity: .9; font-size:1.5em; font-weight:600 ">{{blog.title}}</a></h3>
@@ -45,8 +45,8 @@
                                     <p class="list-group-item-text" style="color:black; float:left; opacity: .6">{{blog.date}}</p>
                                     <p class="list-group-item-text" style="color:black; opacity: .6">{{blog.time}} mins read <span class="glyphicon glyphicon-star"></span></p>
                                     <div class="row" style="float:left;margin-left:24em;">
-                                        <a [routerLink]="['/edit',id]"><span class="glyphicon glyphicon-pencil" style="margin-right:20px; color:black; opacity:0.6"></span></a>
-                                        <a  routerLink="/delete"><span class="glyphicon glyphicon-trash" style=" color:black; opacity:0.6"></span></a></div>
+                                        <a  [routerLink]="['/edit',array[i]]" ><span class="glyphicon glyphicon-pencil" style="margin-right:20px; color:black; opacity:0.6"></span></a>
+                                        <button   (click)="deleteBlog(array[i])"><span class="glyphicon glyphicon-trash" style=" color:black; opacity:0.6"></span></button></div>
                                 </div>
          
                              
