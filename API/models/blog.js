@@ -33,7 +33,7 @@ const Blog = sequelize.define('blog', {
         allowNull: false
     },
     date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false
     },
     time: {

@@ -14,11 +14,7 @@ const User = sequelize.define('user', {
         allowNull: false,
         unique: true
     },
-    fname: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    lname: {
+    name: {
         type: Sequelize.STRING,
         allowNull: false
     },

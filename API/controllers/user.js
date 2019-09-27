@@ -111,7 +111,7 @@ exports.postChangePassword = (req, res, next) => {
                 })
                 .then(doMatch => {
                     if (!doMatch) {
-                        const error = new Error('password is incorrect');
+                        const error = new Error('Password is incorrect');
                         return next(error);
                     }
                     return bcrypt.hash(newPassword, 12);
@@ -274,11 +274,12 @@ exports.postChangeEmail = (req, res, next) => {
                             });
                             transporter.sendMail({
                                 to: new_email,
-                                from: 'nimish.noida@gmail.com',
+                                from: 'nimishb2000@gmail.com',
                                 subject: 'OTP for verification',
                                 html: `
-                                    <p>This email has been used for registration on medium</p>
-                                    <p>Please enter the OTP given below to verify your mail address</p>
+                                    <h3>Hi ${user.username}</h3>
+                                    <p>You have changed your email to this mail</p>
+                                    <p>Please enter the OTP given below to verify your new e-mail address</p>
                                     <h2>${otp}</h2>
                                     <p>The OTP will expire in 2 minutes</p>
                                 `

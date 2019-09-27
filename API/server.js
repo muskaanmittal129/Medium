@@ -5,6 +5,7 @@ const sequelize = require('./util/database');
 const User = require('./models/user');
 const Blog = require('./models/blog');
 const Bookmark = require('./models/bookmark');
+const Token = require('./models/token');
 
 const loginRoutes = require('./routes/login');
 const blogRoutes = require('./routes/blogs');
@@ -34,6 +35,8 @@ app.use((error, req, res, next) => {
 });
 
 User.hasMany(Blog);
+User.hasMany(Token);
+Token.belongsTo(User);
 Blog.belongsToMany(User, { through: Bookmark });
 
 sequelize

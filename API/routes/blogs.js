@@ -44,6 +44,7 @@ router.post(
 );
 
 router.get('/home', blogController.getAllBlogs);
+router.get('/blog/:blogId', blogController.getBlog);
 router.get('/blog/edit/:blogId', blogController.getEditBlog);
 router.post(
     '/blog/edit/:blogId',

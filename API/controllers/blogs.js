@@ -42,7 +42,7 @@ exports.postAddBlog = (req, res, next) => {
                         imagePath: imagePath,
                         content: content,
                         category: category,
-                        publisher: decoded.name,
+                        publisher: user.name,
                         userId: user.id,
                         date: date,
                         time: time
@@ -79,6 +79,24 @@ exports.getAllBlogs = (req, res, next) => {
             }
             res.status(200).json({
                 blogs: blogs
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            return next(error);
+        });
+};
+
+exports.getBlog = (req, res, next) => {
+    const blogId = req.params.blogId;
+    Blog.findByPk(blogId)
+        .then(blog => {
+            if(!blog){
+                const error = new Error('Invalid blog ID');
+                return next(error);
+            }
+            res.json({
+                blog: blog
             });
         })
         .catch(err => {

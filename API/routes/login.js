@@ -69,5 +69,7 @@ router.post(
     loginController.postCheckOTP
 );
 router.post('/resend-otp/:username', loginController.resendOTP);
+router.post('/signout', loginController.signOut);
+router.post('/signout/all-devices', loginController.signOutfromAllDevices);
 
 module.exports = router;
