@@ -5,6 +5,7 @@ const sendgridTransport = require('nodemailer-sendgrid-transport');
 const { validationResult } = require('express-validator/check');
 
 const User = require('../models/user');
+const Token = require('../models/token');
 const config = require('../util/config');
 
 const transporter = nodemailer.createTransport(sendgridTransport({
@@ -16,6 +17,7 @@ const transporter = nodemailer.createTransport(sendgridTransport({
 exports.postSignin = (req, res, next) => {
     const username = req.body.username;
     const password = req.body.password;
+    let token;
     User
         .findOne({ where: { username: username } })
         .then(user => {
@@ -51,7 +53,7 @@ exports.postSignin = (req, res, next) => {
                         });
                         transporter.sendMail({
                             to: user.email,
-                            from: 'nimish.noida@gmail.com',
+                            from: 'nimishb2000@gmail.com',
                             subject: 'OTP for verification',
                             html: `
                                 <p>This email has been used for registration on medium</p>
@@ -74,17 +76,27 @@ exports.postSignin = (req, res, next) => {
                             const error = new Error('Invalid credentials');
                             return next(error);
                         }
-                        const token = jwt.sign({
+                        token = jwt.sign({
                             name: `${user.fname} ${user.lname}`,
                             username: user.username,
                         }, config.tokenSecret, {
                             expiresIn: '6h'
                         });
+                        const insert_token = new Token({
+                            token: token,
+                            userId: user.id
+                        });
+                        return insert_token.save();
+                    })
+                    .then(() => {
                         res.status(200).json({
                             message: 'signin successful',
                             token: token,
                             username: user.username
                         });
+                        setTimeout(function () {
+                            Token.destroy({ where: { token: token } });
+                        }, 21600000);
                     })
                     .catch(err => {
                         const error = new Error(err);
@@ -140,8 +152,7 @@ exports.postSignup = (req, res, next) => {
             User
                 .create({
                     username: username,
-                    fname: fname,
-                    lname: lname,
+                    name: fname + ' ' + lname,
                     email: email,
                     password: hashedPassword,
                     otp: otp
@@ -168,17 +179,17 @@ exports.postSignup = (req, res, next) => {
                         message: 'Signup was successful. An OTP has been sent on your e-mail address',
                         username: username
                     });
-                    // transporter.sendMail({
-                    //     to: email,
-                    //     from: 'nimish.noida@gmail.com',
-                    //     subject: 'OTP for verification',
-                    //     html: `
-                    //             <p>This email has been used for registration on medium</p>
-                    //             <p>Please enter the OTP given below to verify your mail address</p>
-                    //             <h2>${otp}</h2>
-                    //             <p>The OTP will expire in 2 minutes</p>
-                    //         `
-                    // });
+                    transporter.sendMail({
+                        to: email,
+                        from: 'nimishb2000@gmail.com',
+                        subject: 'OTP for verification',
+                        html: `
+                                <p>This email has been used for registration on medium</p>
+                                <p>Please enter the OTP given below to verify your mail address</p>
+                                <h2>${otp}</h2>
+                                <p>The OTP will expire in 2 minutes</p>
+                            `
+                    });
                 })
                 .catch(err => {
                     const error = new Error(err);
@@ -260,7 +271,7 @@ exports.resendOTP = (req, res, next) => {
                     });
                     transporter.sendMail({
                         to: user.email,
-                        from: 'nimish.noida@gmail.com',
+                        from: 'nimishb2000@gmail.com',
                         subject: 'OTP for verification',
                         html: `
                             <p>This email has been used for registration on medium</p>
@@ -279,4 +290,80 @@ exports.resendOTP = (req, res, next) => {
             const error = new Error(err);
             return next(error);
         });
+};
+
+exports.signOut = (req, res, next) => {
+    let token = req.headers['authorization'];
+    if (token) {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            User.findOne({ where: { username: decoded.username } })
+                .then(user => {
+                    if (!user) {
+                        const error = new Error('User not found');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            Token.destroy({ where: { token: token } })
+                .then(() => {
+                    res.json({
+                        message: 'Logged out'
+                    });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        });
+    }
+    else {
+        const err = new Error('Token is not provided');
+        return next(err);
+    }
+};
+
+exports.signOutfromAllDevices = (req, res, next) => {
+    let token = req.headers['authorization'];
+    let userId;
+    if (token) {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            
+            User.findOne({ where: { username: decoded.username } })
+                .then(user => {
+                    if (!user) {
+                        const error = new Error('User not found');
+                        return next(error);
+                    }
+                    userId = user.id;
+                    return Token.destroy({ where: { userId: userId } });
+                })
+                .then(() => {
+                    res.json({
+                        message: 'Logged out'
+                    });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+
+        });
+    }
+    else {
+        const err = new Error('Token is not provided');
+        return next(err);
+    }
 };
