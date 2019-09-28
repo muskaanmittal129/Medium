@@ -367,7 +367,7 @@ exports.postChangeEmail = (req, res, next) => {
                                 subject: 'OTP for verification',
                                 html: `
                                     <h3>Hi ${user.username}</h3>
-                                    <p>You have changed your email to this mail</p>
+                                    <p>You have changed your e-mail to this e-mail address</p>
                                     <p>Please enter the OTP given below to verify your new e-mail address</p>
                                     <h2>${otp}</h2>
                                     <p>The OTP will expire in 2 minutes</p>
