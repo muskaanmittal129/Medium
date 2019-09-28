@@ -22,7 +22,7 @@ exports.postAddBlog = (req, res, next) => {
         return next(err);
     }
     let token = req.headers['authorization'];
-    if (token) {
+    if (token !== 'Bearer null') {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
@@ -102,7 +102,7 @@ exports.getAllBlogs = (req, res, next) => {
 exports.getBlog = (req, res, next) => {
     const blogId = req.params.blogId;
     let token = req.headers['authorization'];
-    if (token) {
+    if (token !== 'Bearer null') {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
@@ -178,7 +178,7 @@ exports.getEditBlog = (req, res, next) => {
         const err = new Error(errors.array()[0].msg);
         return next(err);
     }
-    if (token) {
+    if (token !== null) {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
@@ -238,7 +238,7 @@ exports.postEditBlog = (req, res, next) => {
     const blogId = req.params.blogId;
     let userId;
     let token = req.headers['authorization'];
-    if (token) {
+    if (token !== 'Bearer null') {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
@@ -320,8 +320,7 @@ exports.postDeleteBlog = (req, res, next) => {
     const blogId = req.params.blogId;
     let userId;
     let token = req.headers['authorization'];
-    console.log(token);
-    if (token) {
+    if (token !== 'Bearer null') {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
@@ -387,7 +386,7 @@ exports.postDeleteBlog = (req, res, next) => {
 exports.postClap = (req, res, next) => {
     const blogId = req.params.blogId;
     let token = req.headers['authorization'];
-    if (token) {
+    if (token !== 'Bearer null') {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
@@ -441,7 +440,7 @@ exports.postBookmark = (req, res, next) => {
     let token = req.headers['authorization'];
     const blogId = req.params.blogId;
     let current_user, current_blog;
-    if (token) {
+    if (token !== 'Bearer null') {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
