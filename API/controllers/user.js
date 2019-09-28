@@ -4,8 +4,10 @@ const nodemailer = require('nodemailer');
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 const { validationResult } = require('express-validator/check');
 
+const Token = require('../models/token');
 const User = require('../models/user');
 const Blog = require('../models/blog');
+const Bookmark = require('../models/bookmark');
 const config = require('../util/config');
 
 const transporter = nodemailer.createTransport(sendgridTransport({
@@ -23,7 +25,18 @@ exports.getUser = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     user.getBlogs()
                         .then(blogs => {
@@ -59,7 +72,18 @@ exports.postDeleteUser = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const err = new Error('User not found');
@@ -98,12 +122,23 @@ exports.postChangePassword = (req, res, next) => {
     }
     if (token) {
         token = token.slice(7, token.length);
+        Token.findByPk(token)
+            .then(token => {
+                if (!token) {
+                    const error = new Error('Invalid token');
+                    return next(error);
+                }
+            })
+            .catch(err => {
+                const error = new Error(err);
+                return next(error);
+            });
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
             if (err) {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            User.findByPk(decoded.userId)
                 .then(user => {
                     new_user = user;
                     const oldPassword = req.body.oldPassword;
@@ -153,13 +188,23 @@ exports.postChangeName = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const err = new Error('user not found');
                     }
-                    user.fname = fname;
-                    user.lname = lname;
+                    user.name = fname + ' ' + lname;
                     return user.save();
                 })
                 .then(() => {
@@ -177,7 +222,7 @@ exports.postChangeName = (req, res, next) => {
         const err = new Error('Token is not provided');
         return next(err);
     }
-}
+};
 
 exports.postChangeUsername = (req, res, next) => {
     const new_username = req.body.username;
@@ -194,7 +239,29 @@ exports.postChangeUsername = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findOne({ where: { username: new_username } })
+                .then(user => {
+                    if (user) {
+                        const error = new Error('Username already exists');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const err = new Error('user not found');
@@ -222,7 +289,7 @@ exports.postChangeUsername = (req, res, next) => {
         const err = new Error('Token not provided');
         return next(err);
     }
-}
+};
 
 exports.postChangeEmail = (req, res, next) => {
     const new_email = req.body.email;
@@ -239,7 +306,29 @@ exports.postChangeEmail = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findOne({ where: { email: new_email } })
+                .then(user => {
+                    if (user) {
+                        const error = new Error('email already exists');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const error = new Error('user not found');
@@ -247,13 +336,12 @@ exports.postChangeEmail = (req, res, next) => {
                     }
                     const otp = Math.floor(100000 + Math.random() * 900000);
                     user.verified = false;
-                    user.otp = null;
                     user.email = new_email;
                     user.otp = otp;
                     user.save()
                         .then(() => {
                             setTimeout(function () {
-                                User.findOne({ where: { username: decoded.username } })
+                                User.findByPk(decoded.userId)
                                     .then(user => {
                                         if (user.otp !== null) {
                                             user.otp = null;
@@ -270,7 +358,8 @@ exports.postChangeEmail = (req, res, next) => {
                                     });
                             }, 120000);
                             res.json({
-                                message: 'otp sent'
+                                message: 'otp sent',
+                                username: user.username
                             });
                             transporter.sendMail({
                                 to: new_email,
@@ -301,3 +390,70 @@ exports.postChangeEmail = (req, res, next) => {
         return next(err);
     }
 }
+
+exports.getBookmarks = (req, res, next) => {
+    let token = req.headers['authorization'];
+    let x = 0;
+    if (token) {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            Token.findByPk(token)
+                .then(fetched_token => {
+                    if (!fetched_token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            let bookmarkedBlogs = new Array();
+            User.findByPk(decoded.userId)
+                .then(user => {
+                    if (!user) {
+                        const error = new Error('User not found');
+                        return next(error);
+                    }
+                    return Bookmark.findAll({ where: { userId: user.id } });
+                })
+                .then(bookmarks => {
+                    if (bookmarks.length <= 0) {
+                        const error = new Error('You have no bookmarks');
+                        return next(error);
+                    }
+                    bookmarks.forEach(bookmark => {
+                        Blog.findByPk(bookmark.blogId)
+                            .then(blog => {
+                                bookmarkedBlogs.push(blog.dataValues);
+                                x++;
+                            })
+                            .catch(err => {
+                                const error = new Error(err);
+                                return next(error);
+                            });
+                    });
+                    const timer = setInterval(function () {
+                        if(x === bookmarks.length){
+                            clearInterval(timer);
+                            res.json({
+                                blogs: bookmarkedBlogs
+                            });
+                        }
+                    }, 10);
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        });
+    }
+    else {
+        const err = new Error('Token not provided');
+        return next(err);
+    }
+};

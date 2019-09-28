@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator/check');
 
+const Token = require('../models/token');
 const Blog = require('../models/blog');
 const Bookmark = require('../models/bookmark');
 const User = require('../models/user');
@@ -28,7 +29,18 @@ exports.postAddBlog = (req, res, next) => {
                 const error = new Error('Token is not valid');
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const error = new Error('No user found');
@@ -91,7 +103,7 @@ exports.getBlog = (req, res, next) => {
     const blogId = req.params.blogId;
     Blog.findByPk(blogId)
         .then(blog => {
-            if(!blog){
+            if (!blog) {
                 const error = new Error('Invalid blog ID');
                 return next(error);
             }
@@ -121,7 +133,18 @@ exports.getEditBlog = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const error = new Error('No user found');
@@ -170,7 +193,18 @@ exports.postEditBlog = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const error = new Error('No user found');
@@ -242,7 +276,18 @@ exports.postDeleteBlog = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const error = new Error('No user found');
@@ -297,13 +342,24 @@ exports.postClap = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
             Blog.findOne({ where: { id: blogId } })
                 .then(blog => {
                     if (!blog) {
                         const err = new Error('Blog not found');
                         return next(err);
                     }
-                    blog.claps = blog.claps + 1;
+                    blog.claps++;
                     blog.save()
                         .then(() => {
                             res.json({
@@ -327,7 +383,7 @@ exports.postClap = (req, res, next) => {
     }
 };
 
-exports.postAddBookmark = (req, res, next) => {
+exports.postBookmark = (req, res, next) => {
     let token = req.headers['authorization'];
     const blogId = req.params.blogId;
     let current_user, current_blog;
@@ -338,7 +394,18 @@ exports.postAddBookmark = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const err = new Error('user not found');

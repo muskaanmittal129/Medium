@@ -6,6 +6,7 @@ const userController = require('../controllers/user.js');
 const router = express.Router();
 
 router.get('/', userController.getUser);
+router.get('/bookmarks', userController.getBookmarks);
 router.post(
     '/change-name',
     [

@@ -5,6 +5,7 @@ const blogController = require('../controllers/blogs.js');
 
 const router = express.Router();
 
+router.get('/home', blogController.getAllBlogs);
 router.post(
     '/blog/create',
     [
@@ -42,8 +43,6 @@ router.post(
     ],
     blogController.postAddBlog
 );
-
-router.get('/home', blogController.getAllBlogs);
 router.get('/blog/:blogId', blogController.getBlog);
 router.get('/blog/edit/:blogId', blogController.getEditBlog);
 router.post(
@@ -85,6 +84,6 @@ router.post(
 );
 router.post('/blog/delete/:blogId', blogController.postDeleteBlog);
 router.post('/blog/clap/:blogId', blogController.postClap);
-router.post('/blog/add-bookmark/:blogId', blogController.postAddBookmark);
+router.post('/blog/bookmark/:blogId', blogController.postBookmark);
 
 module.exports = router;

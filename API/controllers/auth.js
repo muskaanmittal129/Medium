@@ -78,10 +78,8 @@ exports.postSignin = (req, res, next) => {
                         }
                         token = jwt.sign({
                             name: `${user.fname} ${user.lname}`,
-                            username: user.username,
-                        }, config.tokenSecret, {
-                            expiresIn: '6h'
-                        });
+                            userId: user.id
+                        }, config.tokenSecret);
                         const insert_token = new Token({
                             token: token,
                             userId: user.id
@@ -92,11 +90,8 @@ exports.postSignin = (req, res, next) => {
                         res.status(200).json({
                             message: 'signin successful',
                             token: token,
-                            username: user.username
+                            username: username
                         });
-                        setTimeout(function () {
-                            Token.destroy({ where: { token: token } });
-                        }, 21600000);
                     })
                     .catch(err => {
                         const error = new Error(err);
@@ -301,22 +296,27 @@ exports.signOut = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            User.findOne({ where: { username: decoded.username } })
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const error = new Error('User not found');
                         return next(error);
                     }
-                })
-                .catch(err => {
-                    const error = new Error(err);
-                    return next(error);
-                });
-            Token.destroy({ where: { token: token } })
-                .then(() => {
-                    res.json({
-                        message: 'Logged out'
-                    });
+                    Token.findOne({ where: { token: token } })
+                        .then(fetched_token => {
+                            if (!fetched_token) {
+                                const error = new Error('Token not valid');
+                                return next(error);
+                            }
+                            fetched_token.destroy();
+                            res.json({
+                                message: 'Logged out'
+                            });
+                        })
+                        .catch(err => {
+                            const error = new Error(err);
+                            return next(error);
+                        });
                 })
                 .catch(err => {
                     const error = new Error(err);
@@ -332,7 +332,6 @@ exports.signOut = (req, res, next) => {
 
 exports.signOutfromAllDevices = (req, res, next) => {
     let token = req.headers['authorization'];
-    let userId;
     if (token) {
         token = token.slice(7, token.length);
         jwt.verify(token, config.tokenSecret, (err, decoded) => {
@@ -340,20 +339,29 @@ exports.signOutfromAllDevices = (req, res, next) => {
                 const error = new Error(err);
                 return next(error);
             }
-            
-            User.findOne({ where: { username: decoded.username } })
+            User.findByPk(decoded.userId)
                 .then(user => {
                     if (!user) {
                         const error = new Error('User not found');
                         return next(error);
                     }
-                    userId = user.id;
-                    return Token.destroy({ where: { userId: userId } });
-                })
-                .then(() => {
-                    res.json({
-                        message: 'Logged out'
-                    });
+                    Token.findAll({ where: { userId: user.id } })
+                        .then(allTokens => {
+                            if (allTokens.length <= 0) {
+                                const error = new Error('Token not valid');
+                                return next(error);
+                            }
+                            allTokens.forEach(element => {
+                                element.destroy();
+                            });
+                            res.json({
+                                message: 'Logged out'
+                            });
+                        })
+                        .catch(err => {
+                            const error = new Error(err);
+                            return next(error);
+                        });
                 })
                 .catch(err => {
                     const error = new Error(err);
