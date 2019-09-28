@@ -101,20 +101,72 @@ exports.getAllBlogs = (req, res, next) => {
 
 exports.getBlog = (req, res, next) => {
     const blogId = req.params.blogId;
-    Blog.findByPk(blogId)
-        .then(blog => {
-            if (!blog) {
-                const error = new Error('Invalid blog ID');
+    let token = req.headers['authorization'];
+    if (token) {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
                 return next(error);
             }
-            res.json({
-                blog: blog
-            });
-        })
-        .catch(err => {
-            const error = new Error(err);
-            return next(error);
+            Token.findByPk(token)
+                .then(token => {
+                    if (!token) {
+                        const error = new Error('Invalid token');
+                        return next(error);
+                    }
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+            Blog.findByPk(blogId)
+                .then(blog => {
+                    if (!blog) {
+                        const error = new Error('Invalid blog ID');
+                        return next(error);
+                    }
+                    Bookmark.findOne({ where: { blogId: blog.id, userId: decoded.userId } })
+                        .then(bookmark => {
+                            if(!bookmark){
+                                res.json({
+                                    blog: blog,
+                                    isBookmarked: false
+                                });
+                            }
+                            res.json({
+                                blog: blog,
+                                isBookmarked: true
+                            })
+                        })
+                        .catch(err => {
+                            const error = new Error(err);
+                            return next(error);
+                        });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
         });
+    }
+    else {
+        Blog.findByPk(blogId)
+            .then(blog => {
+                if (!blog) {
+                    const error = new Error('Invalid blog ID');
+                    return next(error);
+                }
+                res.json({
+                    blog: blog,
+                    isBookmarked: false
+                });
+            })
+            .catch(err => {
+                const error = new Error(err);
+                return next(error);
+            });
+    }
 };
 
 exports.getEditBlog = (req, res, next) => {
@@ -359,7 +411,9 @@ exports.postClap = (req, res, next) => {
                         const err = new Error('Blog not found');
                         return next(err);
                     }
-                    blog.claps++;
+                    let clap_count = blog.claps;
+                    clap_count++;
+                    blog.claps = clap_count;
                     blog.save()
                         .then(() => {
                             res.json({
@@ -423,7 +477,8 @@ exports.postBookmark = (req, res, next) => {
                         bookmark.destroy({ where: { userId: current_user.id, blogId: current_blog.id } })
                             .then(() => {
                                 res.json({
-                                    message: 'bookmark removed'
+                                    message: 'bookmark removed',
+                                    isBookmarked: false
                                 });
                             })
                             .catch(err => {
@@ -434,7 +489,8 @@ exports.postBookmark = (req, res, next) => {
                     else {
                         current_blog.addUser(current_user);
                         res.json({
-                            message: 'bookmark added'
+                            message: 'bookmark added',
+                            isBookmarked: true
                         });
                     }
                 })
