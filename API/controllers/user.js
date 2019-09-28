@@ -438,13 +438,110 @@ exports.getBookmarks = (req, res, next) => {
                             });
                     });
                     const timer = setInterval(function () {
-                        if(x === bookmarks.length){
+                        if (x === bookmarks.length) {
                             clearInterval(timer);
                             res.json({
                                 blogs: bookmarkedBlogs
                             });
                         }
                     }, 10);
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        });
+    }
+    else {
+        const err = new Error('Token not provided');
+        return next(err);
+    }
+};
+
+exports.getChangeName = (req, res, next) => {
+    let token = req.headers['authorization'];
+    if (token !== 'Bearer null') {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            User.findByPk(decoded.userId)
+                .then(user => {
+                    if(!user){
+                        const error = new Error('user not found');
+                        return next(error);
+                    }
+                    const name = user.name;
+                    const fname = name.split(' ')[0];
+                    const lname = name.split(' ')[1];
+                    res.json({
+                        fname: fname,
+                        lname: lname
+                    });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        });
+    }
+    else {
+        const err = new Error('Token not provided');
+        return next(err);
+    }
+};
+
+exports.getChangeUsername = (req, res, next) => {
+    let token = req.headers['authorization'];
+    if (token !== 'Bearer null') {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            User.findByPk(decoded.userId)
+                .then(user => {
+                    if(!user){
+                        const error = new Error('user not found');
+                        return next(error);
+                    }
+                    res.json({
+                        username: user.username
+                    });
+                })
+                .catch(err => {
+                    const error = new Error(err);
+                    return next(error);
+                });
+        });
+    }
+    else {
+        const err = new Error('Token not provided');
+        return next(err);
+    }
+};
+
+exports.getChangeEmail = (req, res, next) => {
+    let token = req.headers['authorization'];
+    if (token !== 'Bearer null') {
+        token = token.slice(7, token.length);
+        jwt.verify(token, config.tokenSecret, (err, decoded) => {
+            if (err) {
+                const error = new Error(err);
+                return next(error);
+            }
+            User.findByPk(decoded.userId)
+                .then(user => {
+                    if(!user){
+                        const error = new Error('user not found');
+                        return next(error);
+                    }
+                    res.json({
+                        username: user.email
+                    });
                 })
                 .catch(err => {
                     const error = new Error(err);

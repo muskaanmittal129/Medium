@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get('/', userController.getUser);
 router.get('/bookmarks', userController.getBookmarks);
+router.get('/change-name', userController.getChangeName);
 router.post(
     '/change-name',
     [
@@ -31,6 +32,7 @@ router.post(
     ],
     userController.postChangeName
 );
+router.get('/change-username', userController.getChangeUsername);
 router.post('/change-username', userController.postChangeUsername);
 router.post(
     '/change-password',
@@ -54,6 +56,7 @@ router.post(
     ],
     userController.postChangePassword
 );
+router.get('/change-email', userController.getChangeEmail);
 router.post(
     '/change-email',
     check('email')
