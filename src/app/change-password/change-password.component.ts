@@ -46,7 +46,7 @@ export class ChangePasswordComponent implements OnInit {
     .subscribe(
       (response) => {console.log(response),
         this.authService.loggedOut();},
-      (error) => console.log(error),
+      
 
     
   );
@@ -62,7 +62,7 @@ export class ChangePasswordComponent implements OnInit {
       .subscribe(
         (response) => {
           this.ngxService.stop();
-          console.log(response);
+          
           this.resp = response;
           if (this.resp.message) {
             Swal.fire({
@@ -86,7 +86,7 @@ export class ChangePasswordComponent implements OnInit {
         },
 
         (error) => {
-          console.log(error)
+          
           this.ngxService.stop();
           this.error = error
           Swal.fire({

@@ -66,10 +66,10 @@ export class HeaderComponent implements OnInit {
   toHomePage() {this.ngxService.start(); 
     this.serverService.logout()
     .subscribe(
-      (response) => {console.log(response),
+      (response) => {
         this.ngxService.stop(); 
         this.authService.loggedOut();}, 
-      (error) => {console.log(error),
+      (error) => {
         this.ngxService.stop(); },
 
     

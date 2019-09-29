@@ -31,7 +31,7 @@ export class CreateComponent implements OnInit {
       .subscribe(
         (response) => { 
           this.ngxService.stop();
-          console.log(response);
+         
           this.res = response
           if(this.res.message === "blog created successfully"){
             this.router.navigate(['home']);

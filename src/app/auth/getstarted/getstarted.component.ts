@@ -5,8 +5,7 @@ import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material';
 import { SigninComponent } from '../signin/signin.component';
 import { ServerService } from 'src/app/services/server.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NgClass } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import {  Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import Swal from 'sweetalert2';
 
@@ -41,7 +40,7 @@ export class GetstartedComponent implements OnInit {
 
 
   navigateToSignin(){
-    // this.router.navigate(['signin'],{relativeTo:this.route});
+    
     const dialogConfig =  new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = false;
@@ -66,9 +65,9 @@ export class GetstartedComponent implements OnInit {
     .subscribe(
       (response) => {
         this.ngxService.stop();
-        console.log(response);
+        
         this.resp = response;
-        console.log( this.resp.username);
+        
        
         
        Swal.fire({title:this.resp.message,
@@ -88,7 +87,7 @@ export class GetstartedComponent implements OnInit {
       },
       (error:HttpErrorResponse) => {
         this.ngxService.stop();
-        console.log(error);
+        
         this.errorMsg = error.error.message;
         Swal.fire({title:this.errorMsg || "Server Error",
         type:"warning"});
@@ -115,7 +114,7 @@ export class GetstartedComponent implements OnInit {
 
     );
     
-      // this.onClose();
+    
     
 
     

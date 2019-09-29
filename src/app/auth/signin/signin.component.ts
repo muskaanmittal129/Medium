@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 
 import { NgForm } from '@angular/forms';
 
@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit {
-  // @Output() notify: EventEmitter<string> = new EventEmitter<string>();
+  
   usname:any;
   errorMsg:string;
   resp:any;
@@ -55,7 +55,7 @@ export class SigninComponent implements OnInit {
 
   onSignin(form:NgForm){
     this.ngxService.start();
-    console.log(JSON.stringify(form.value));
+    
     const value = form.value;
     this.serverService.signInUser(value.username,value.password )
     .subscribe(
@@ -63,20 +63,20 @@ export class SigninComponent implements OnInit {
       response => {
         this.ngxService.stop();
         this.resp = response;
-        console.log(this.resp);
+        
         
         this.usname = this.resp.username;
-        // this.notify.emit(this.usname);
+        
         localStorage.setItem('token', this.resp.token);
         localStorage.setItem('username', this.resp.username);
         
-        console.log(this.usname);
+        
 
        
         this.blogService.setUsername(this.usname);
         
          
-          // alert(this.resp.message);
+          
           Swal.fire({
             title: this.resp.message,
            
@@ -92,10 +92,10 @@ export class SigninComponent implements OnInit {
 
         (error:HttpErrorResponse) => {
           this.ngxService.stop();
-          console.log(error);
+          
           this.errorMsg = error.error.message;
           this.uName =  error.error.username;
-          // alert(this.errorMsg || "Server Error");
+         
           Swal.fire({
             title: this.errorMsg,
            

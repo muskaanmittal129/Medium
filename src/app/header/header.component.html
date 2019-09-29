@@ -40,16 +40,16 @@
      
 <ul class="dropdown-menu"> 
    
-    <li><a style="cursor: pointer;" routerLink="/bookmark">Bookmarks</a></li>
+    <li><button style=" background-color:white; width:100%; border: none;"><a style="text-decoration: none; color: black" routerLink="/bookmark">Bookmarks</a></button></li>
     <li class="dropdown myDropdown" appDropdown>
-            <button *ngIf="authService.signedIn()" style=" background-color:white; border: none;"
+            <button *ngIf="authService.signedIn()" style=" background-color:white; border: none; width:100%;"
              class="dropdown-toggle button">Change Info</button>
         <ul class="dropdown-menu">
-    <li><button style=" background-color:white; border: none;" (click)="onChangeN()" >Change Name</button></li>
-    <li><button style=" background-color:white; border: none;" (click)="onChangeU()" >Change Username</button></li>
-    <li><button style=" background-color:white; border: none;" (click)="onChangeE()" >Change Email</button></li>
-    <li><button style=" background-color:white; border: none;" (click)="onChangeP()" >Change Password</button></li></ul></li> 
-    <li><button style=" background-color:white; border: none;" (click)="onDeleteProfile()">Delete Profile</button></li>
+    <li><button class="active" style=" background-color:white; width:100%; border: none;" (click)="onChangeN()" >Change Name</button></li>
+    <li><button style=" background-color:white; width:100%; border: none;" (click)="onChangeU()" >Change Username</button></li>
+    <li><button style=" background-color:white;  width:100%; border: none;" (click)="onChangeE()" >Change Email</button></li>
+    <li><button style=" background-color:white; width:100%; border: none;" (click)="onChangeP()" >Change Password</button></li></ul></li> 
+    <li><button style=" background-color:white;  width:100%; border: none;" (click)="onDeleteProfile()">Delete Profile</button></li>
 </ul>
 </li>
 
@@ -58,7 +58,7 @@
                         
 
  <li><button *ngIf="authService.signedIn()"  class="btn btn-success"
- (click)="toHomePage()" style="background-color: white; border:1px solid black ;
+ (click)="toHomePage()" style="background-color: white;  width:100%; border:1px solid black ;
    
     margin-top:8px;"><a style="color:black;
     text-decoration: none;">Logout</a></button></li>
@@ -81,4 +81,4 @@
             </ul>
         </div>
     </div>
-</div>
+</div><hr style="opacity:0;">

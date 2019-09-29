@@ -25,16 +25,16 @@ array:number[]=[];
         this.ngxService.stop(); 
         this.resp = response;
         this.blog = this.resp.blogs;
-        console.log(this.blog);
+        
         
         for(this.i=0; this.i<this.blog.length; this.i++){
           
           this.id = this.blog[this.i].id;
           
-          console.log(this.id);
+          
          for(this.j=this.i; this.j<this.i+1; this.j++)
           {this.array.push(this.id);
-          console.log(this.array);}
+          }
          
          
   
@@ -42,7 +42,7 @@ array:number[]=[];
 
 
       },
-      (error) => {console.log(error);
+      (error) => {
         this.ngxService.stop();}
 
     );

@@ -49,11 +49,11 @@ export class ChangeEmailComponent implements OnInit {
     .subscribe(
       (response) => {
         this.ngxService.stop();
-        console.log(response);
+        
         this.resp = response; 
         if(this.resp){ this.onClose();
           form.reset();}
-        console.log(this.resp.username)
+        
         Swal.fire({title:this.resp.message,
           type:"success",});
         if (this.resp.message ){
@@ -70,7 +70,7 @@ export class ChangeEmailComponent implements OnInit {
         
          
 
-        (error) => {console.log(error) 
+        (error) => {
           this.ngxService.stop();
           this.error= error
           Swal.fire({title:this.error.error.message,

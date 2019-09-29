@@ -34,7 +34,7 @@ export class EditBlogComponent implements OnInit {
 
         (response) => {this.ngxService.stop(); 
           this.res = response;
-          console.log(this.res.blog);
+          
           
          
 
@@ -65,14 +65,14 @@ export class EditBlogComponent implements OnInit {
     this.serverService.postEditBlog(value.title, value.subTitle, value.imagePath, value.content, value.category, this.blogID)
       .subscribe(
         (response) => {
-          console.log(response);
+          
           this.res = response;
           if (this.res.message === 'Updated successfully') {
             this.ngxService.stop();
             this.router.navigate(['myProfile']);
           }
         },
-        (error) => console.log(error),
+        
 
 
       );
