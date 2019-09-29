@@ -1,10 +1,13 @@
+
+<ngx-ui-loader></ngx-ui-loader>
+
 <!-- <h2>{{uName}}</h2> -->
-<h3>{{fName}} {{lName}}</h3>
+<h1>{{name}}</h1>
 <p>{{uName}}</p>
-<p>{{email}}</p><hr>
-<div class="container-fluid" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ">
+<p style="margin-bottom: 50px;">{{email}}</p><hr>
+<div class="container-fluid" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif">
     <div class="row">
-       <div class="col-md-8">
+       <div   class="col-md-8">
  
  
  
@@ -20,6 +23,7 @@
                  
                    
                    <a style="cursor: pointer;"
+                   
                  
                   >
     
@@ -29,11 +33,11 @@
                         
                          <div class="pull-left">
                                 <h3 class="list-group-item-heading" >
-                                 <a  [routerLink] = "['/description',i]"
-                                     routerLinkActive = "active"
+                                 <a [routerLink] = "['/description',array[i]]"
+                                 routerLinkActive = "active" 
                                      style="color:black;
-                                 opacity: .9; font-size:1.5em; font-weight:600 ">{{blog.title}}</a></h3>
-                                <p  *ngIf="blog.subTitle"
+                                     opacity: .9; font-size:1em;  ">{{blog.title}}</a></h3>
+                                 <p  *ngIf="blog.subTitle"
                                  class="list-group-item-text"
                                   style="color:black;
                                   font-size:1.0.9em;
@@ -42,11 +46,11 @@
                                  class="list-group-item-text"
                                   style="color:black;  opacity: .8">{{blog.publisher}}</p>
                                 
-                                    <p class="list-group-item-text" style="color:black; float:left; opacity: .6">{{blog.date}}</p>
-                                    <p class="list-group-item-text" style="color:black; opacity: .6">{{blog.time}} mins read <span class="glyphicon glyphicon-star"></span></p>
-                                    <div class="row" style="float:left;margin-left:24em;">
-                                        <a  [routerLink]="['/edit',array[i]]" ><span class="glyphicon glyphicon-pencil" style="margin-right:20px; color:black; opacity:0.6"></span></a>
-                                        <button   (click)="deleteBlog(array[i])"><span class="glyphicon glyphicon-trash" style=" color:black; opacity:0.6"></span></button></div>
+                                    <p class="list-group-item-text" style="color:black; float:left; margin-right: 1em; opacity: .6">{{blog.date}}</p>
+                                    <p class="list-group-item-text" style="color:black; opacity: .6; float:left;margin-right:10em;">{{blog.time}} mins read <span class="glyphicon glyphicon-star"></span></p>
+                                    <div class="row" >
+                                        <button  style="margin-right: 1em;" [routerLink]="['/edit',array[i]]" ><span  class="glyphicon glyphicon-pencil" style="color:black; opacity:0.6"></span></button>
+                                        <button    (click)="deleteBlog(array[i])"><span class="glyphicon glyphicon-trash" style=" color:black; opacity:0.6"></span></button></div>
                                 </div>
          
                              

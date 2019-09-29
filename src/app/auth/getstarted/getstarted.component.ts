@@ -7,6 +7,8 @@ import { ServerService } from 'src/app/services/server.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgClass } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import Swal from 'sweetalert2';
 
 
 
@@ -31,8 +33,9 @@ export class GetstartedComponent implements OnInit {
   constructor(private serverService:ServerService,
     private router:Router,
     private dialog: MatDialog,
-    private dialogRef:MatDialogRef<GetstartedComponent>) { }
-
+    private dialogRef:MatDialogRef<GetstartedComponent>,
+    private ngxService: NgxUiLoaderService) { }
+ 
   ngOnInit() {
   }
 
@@ -47,7 +50,7 @@ export class GetstartedComponent implements OnInit {
     dialogConfig.height = "90%"; 
     this.dialog.open(SigninComponent,dialogConfig)
 
-  }
+  } 
 
   onClose(){
     this.dialogRef.close();
@@ -55,20 +58,26 @@ export class GetstartedComponent implements OnInit {
   }
 
   onSignup(form:NgForm){
+    this.ngxService.start();
     console.log(JSON.stringify(form.value));
     const value = form.value;
     this.serverService
     .signUpUser(value.fname, value.lname,value.username, value.email, value.password , value.confirmPassword)
     .subscribe(
       (response) => {
-        
+        this.ngxService.stop();
         console.log(response);
         this.resp = response;
         console.log( this.resp.username);
        
         
-       
-        alert(this.resp.message);
+       Swal.fire({title:this.resp.message,
+            type:"success",
+            showConfirmButton:false,
+            timer:2500,
+      
+      });
+        
         if (this.resp.message ){
         this.router.navigate(['/verify', this.resp.username]);}
          this.onClose(); 
@@ -78,10 +87,11 @@ export class GetstartedComponent implements OnInit {
 
       },
       (error:HttpErrorResponse) => {
-       
+        this.ngxService.stop();
         console.log(error);
         this.errorMsg = error.error.message;
-        alert(this.errorMsg || "Server Error");
+        Swal.fire({title:this.errorMsg || "Server Error",
+        type:"warning"});
 
         if(this.errorMsg === "username already exists"){
           form.controls.username.reset() ;

@@ -1,0 +1,52 @@
+
+<div style="float:right ">
+        <button class="btn-dialog-close"
+        (click)="onClose()" tabIndex="-1">
+         <span style="font-size: 1.4em; opacity: 0.4;">X</span></button>
+</div>
+
+
+<form  class="form" (ngSubmit) = "onChangeUsername(f)" #f="ngForm">
+            
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label for="fname">Username</label>
+          <input
+          
+          type="text"
+          id="username"
+          name="username"
+          class="form-control"
+          ngModel
+          
+          
+          required
+          #username="ngModel">
+          <span
+          class="help-block"
+          *ngIf="!username.valid && username.touched"
+          style="color: red;">Username is required</span>
+
+          
+
+
+          
+
+         
+          
+        </div>
+      </div>
+    </div>
+
+    <div >
+    <button
+    type="submit"
+    class="btn btn-success"
+    [disabled]="!f.valid" >Change Username</button>
+  </div>
+   
+
+</form>
+
+

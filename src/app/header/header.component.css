@@ -27,3 +27,15 @@
 }
 
 
+.myDropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: -15%;
+    margin-right: -100%;
+ }
+
+ .dropdown-menu li:hover{
+     
+background-color: aqua;
+ }
+
+ 

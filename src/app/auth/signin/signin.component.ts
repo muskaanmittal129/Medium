@@ -8,7 +8,8 @@ import { ServerService } from 'src/app/services/server.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BlogService } from 'src/app/home/blog.service';
 import { Router } from '@angular/router';
-
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-signin',
@@ -26,7 +27,8 @@ export class SigninComponent implements OnInit {
     private dialogRef:MatDialogRef<GetstartedComponent>,
     private dialog: MatDialog,
     private blogService:BlogService,
-    private router:Router,) { } 
+    private router:Router,
+    private ngxService: NgxUiLoaderService) { } 
 
   ngOnInit() {
    
@@ -52,12 +54,15 @@ export class SigninComponent implements OnInit {
   }
 
   onSignin(form:NgForm){
+    this.ngxService.start();
     console.log(JSON.stringify(form.value));
     const value = form.value;
     this.serverService.signInUser(value.username,value.password )
     .subscribe(
       
-      response => {this.resp = response;
+      response => {
+        this.ngxService.stop();
+        this.resp = response;
         console.log(this.resp);
         
         this.usname = this.resp.username;
@@ -69,9 +74,15 @@ export class SigninComponent implements OnInit {
 
        
         this.blogService.setUsername(this.usname);
-        if(this.resp.message === 'signin successful'){
-          alert("Signin Successful");
-        }
+        
+         
+          // alert(this.resp.message);
+          Swal.fire({
+            title: this.resp.message,
+           
+            type: "success",
+           
+          });
        
         
         
@@ -80,11 +91,17 @@ export class SigninComponent implements OnInit {
 
 
         (error:HttpErrorResponse) => {
-       
+          this.ngxService.stop();
           console.log(error);
           this.errorMsg = error.error.message;
           this.uName =  error.error.username;
-          alert(this.errorMsg || "Server Error");
+          // alert(this.errorMsg || "Server Error");
+          Swal.fire({
+            title: this.errorMsg,
+           
+            type: "warning",
+           
+          });
 
           if(this.errorMsg === 'Your email is not verified. Enter OTP to continue'){
             this.onClose();

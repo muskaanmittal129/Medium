@@ -1,3 +1,4 @@
+<ngx-ui-loader></ngx-ui-loader>
 <div class="navbar fixed-top mynav ">
     <div class="container">
         <div class="navbar-header">
@@ -7,7 +8,8 @@
 
         <div class="navbar-default">
             <ul class="nav navbar-nav">
-                <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><a routerLink="home"><span
+                <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+                    <a routerLink="home"><span
                             style="padding:5px;"></span>Home</a> </li>
                 <li routerLinkActive="active"><a routerLink="/create"><span
                             style="padding:5px;"></span>Create</a></li>
@@ -29,15 +31,36 @@
                         margin-top:8px;"><a style="color:#00b33c;
                         text-decoration: none;">Get started</a></button></li>
 
-<li><a routerLink='/myProfile' *ngIf="authService.signedIn()"  style="color:#00b33c;
-text-decoration: none;">My Profile</a></li>
+<li class="dropdown " appDropdown>
+    <button *ngIf="authService.signedIn()"  style="background-color:white; border: none;  margin-top:13px"
+><a routerLink ="/myProfile"><span style="color: #00b33c">My Profile</span></a></button>
+<span style="margin-right: 20px; color: #00b33c; text-decoration: none" *ngIf="authService.signedIn()" class="caret dropdown-toggle button"></span>
+
+    
+     
+<ul class="dropdown-menu"> 
+   
+    <li><a style="cursor: pointer;" routerLink="/bookmark">Bookmarks</a></li>
+    <li class="dropdown myDropdown" appDropdown>
+            <button *ngIf="authService.signedIn()" style=" background-color:white; border: none;"
+             class="dropdown-toggle button">Change Info</button>
+        <ul class="dropdown-menu">
+    <li><button style=" background-color:white; border: none;" (click)="onChangeN()" >Change Name</button></li>
+    <li><button style=" background-color:white; border: none;" (click)="onChangeU()" >Change Username</button></li>
+    <li><button style=" background-color:white; border: none;" (click)="onChangeE()" >Change Email</button></li>
+    <li><button style=" background-color:white; border: none;" (click)="onChangeP()" >Change Password</button></li></ul></li> 
+    <li><button style=" background-color:white; border: none;" (click)="onDeleteProfile()">Delete Profile</button></li>
+</ul>
+</li>
+
+
 
                         
 
-                    <li><button *ngIf="authService.signedIn()" (click)="authService.loggedOut()" class="btn btn-success"
-                            (click)="toHomePage()" style="background-color: transparent;
+ <li><button *ngIf="authService.signedIn()"  class="btn btn-success"
+ (click)="toHomePage()" style="background-color: white; border:1px solid black ;
    
-    margin-top:8px;"><a style="color:#00b33c;
+    margin-top:8px;"><a style="color:black;
     text-decoration: none;">Logout</a></button></li>
 
                             

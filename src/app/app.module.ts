@@ -34,10 +34,18 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditBlogComponent } from './edit-blog/edit-blog.component';
 import { DeleteBlogComponent } from './delete-blog/delete-blog.component';
 import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
+import { DropdownDirective } from './shared/dropdown.directive';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 // import { NgxEditorModule } from 'ngx-editor';
 
 // import { AngularFontAwesomeModule } from 'angular-font-awesome';
 // import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { NgxUiLoaderModule } from  'ngx-ui-loader';
+import { NameChangeComponent } from './name-change/name-change.component';
+import { UsernameChangeComponent } from './username-change/username-change.component';
+import { ChangeEmailComponent } from './change-email/change-email.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { BookmarkComponent } from './bookmark/bookmark.component';
 
 
 
@@ -69,6 +77,12 @@ import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
     EditBlogComponent,
     DeleteBlogComponent,
     VerifyOtpComponent,
+    DropdownDirective,
+    ChangePasswordComponent,
+    NameChangeComponent,
+    UsernameChangeComponent,
+    ChangeEmailComponent,
+    BookmarkComponent,
    
     
    
@@ -84,9 +98,11 @@ import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
     Material.MatDialogModule,
     BrowserAnimationsModule,
     MatDialogModule,
-    // NgxEditorModule,
+   
     // AngularFontAwesomeModule,
     // TooltipModule.forRoot()
+    NgxUiLoaderModule,
+    AngularEditorModule
    
 
     
@@ -104,7 +120,7 @@ import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
    
  
   bootstrap: [AppComponent],
-  entryComponents:[GetstartedComponent, SigninComponent],  
+  entryComponents:[GetstartedComponent, SigninComponent, ChangePasswordComponent, NameChangeComponent, UsernameChangeComponent,ChangeEmailComponent],  
 })
     
     

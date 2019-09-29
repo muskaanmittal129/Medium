@@ -1,8 +1,10 @@
-
+<ngx-ui-loader></ngx-ui-loader>
 
 
 <div class="row">
-  <div class="col-md-6"></div>
+  <div class="col-md-6">
+    <img src="assets/images/createBlog-medium.png"/>
+  </div>
   <!-- <div class="col-md-1 ">
 
      
@@ -132,21 +134,10 @@
                     <div class="col-xs-12">
                       <div class="form-group">
                         <label for="content">Content</label>
-                        <textarea
-                        style="resize: none;"
-                        type="text"
-                        id="content"
-                        name="content"
-                        rows="20"
-                        class="form-control"
-                        ngModel
-                        required
-                        #content="ngModel">Write down your thoughts!</textarea>
-                        
-                        <span
-                        class="help-block"
-                        *ngIf="!content.valid && content.touched"
-                        style="color: red;">Content is required</span>
+                       
+                     
+
+                        <angular-editor  [placeholder]="'Enter text here...'" name="content" ngModel></angular-editor>
                       </div>
                     </div>
                   </div>

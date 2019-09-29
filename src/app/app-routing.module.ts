@@ -11,6 +11,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditBlogComponent } from './edit-blog/edit-blog.component';
 import { DeleteBlogComponent } from './delete-blog/delete-blog.component';
 import { VerifyOtpComponent } from './verify-otp/verify-otp.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+import { BookmarkComponent } from './bookmark/bookmark.component';
 
 
 
@@ -24,15 +26,17 @@ const routes: Routes = [
   
   {path:'home', component:HomeComponent}, 
   
-    {path:'description/:id', component:HomeBlogDetailsComponent
-  },
+    {path:'description/:blogID', component:HomeBlogDetailsComponent
+  }, 
  
  
   {path:'create',component:CreateComponent, canActivate:[AuthGuard]},
   {path:'myProfile',component:UserProfileComponent, canActivate:[AuthGuard]},
   {path:'edit/:blogID',component:EditBlogComponent}, 
    
-  {path:'verify/:username', component:VerifyOtpComponent}, 
+  {path:'verify/:username', component:VerifyOtpComponent},
+  {path:'bookmark', component:BookmarkComponent},
+  
    
   
 ];

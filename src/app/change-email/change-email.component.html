@@ -1,0 +1,53 @@
+
+<div style="float:right ">
+        <button class="btn-dialog-close"
+        (click)="onClose()" tabIndex="-1">
+         <span style="font-size: 1.4em; opacity: 0.4;">X</span></button>
+</div>
+
+
+<form  class="form" (ngSubmit) = "onChangeEmail(f)" #f="ngForm">
+            
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label for="fname">Email</label>
+          <input
+          
+          type="email"
+          id="email"
+          name="email"
+          class="form-control"
+          ngModel
+          pattern ="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+          
+          required
+          #email="ngModel">
+          <span
+          class="help-block"
+          *ngIf="!email.valid && email.touched"
+          style="color: red;">Email is required</span>
+
+         
+        
+
+
+          
+
+         
+          
+        </div>
+      </div>
+    </div>
+
+    <div >
+    <button
+    type="submit"
+    class="btn btn-success"
+    [disabled]="!f.valid" >Change Email</button>
+  </div>
+   
+
+</form>
+
+

@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BlogService } from '../home/blog.service';
 import { ServerService } from '../services/server.service';
 import { Blog } from '../home/blog.model';
 import { AuthServiceService } from '../services/auth-service.service';
 
 import { Router, Params, ActivatedRoute } from '@angular/router';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import Swal from 'sweetalert2';
+
 
 
 @Component({
@@ -12,20 +15,19 @@ import { Router, Params, ActivatedRoute } from '@angular/router';
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent implements OnInit, OnDestroy {
   uName:string;
   res:any;
-  blogs:Blog[]
+  blogs:Blog[];
   blogAtId:any;
-  fName:string;
-  lName:string;
-  email:string;
+  name:string;
+  email:string; 
   // blogID:number;
   i:number;
    j:number;
   id:number;
  array:number[]=[];
-  
+  subscription:any; 
   
 
   
@@ -36,13 +38,21 @@ export class UserProfileComponent implements OnInit {
     private serverService:ServerService,
     private authService:AuthServiceService,
     private router:Router,
-    private route:ActivatedRoute) { }
+    
+    private route:ActivatedRoute,
+    private ngxService: NgxUiLoaderService,
+    
+    ) { }
 
   ngOnInit() {
-  
-    this.serverService.getMyBlogs()
+
+    
+
+    this.ngxService.start();
+    this.subscription = this.serverService.getMyBlogs()
     .subscribe(
       (response) => {
+        this.ngxService.stop();
         this.res = response;
        
         console.log(this.res.blogs);
@@ -65,8 +75,7 @@ export class UserProfileComponent implements OnInit {
         this.blogService.setBlog(this.blogs);
      
       console.log(this.blogs);         
-        this.fName = this.res.user.fname; 
-        this.lName = this.res.user.lname;
+        this.name = this.res.user.name;
         this.email = this.res.user.email;
         this.uName = this.res.user.username;
         
@@ -80,23 +89,38 @@ export class UserProfileComponent implements OnInit {
 
  deleteBlog(id:any){
    
-  
+  this.ngxService.start(); 
    console.log(id)
 
   this.serverService.DeleteBlog(id)
     .subscribe(
-      (response) => {
+      (response) => {this.ngxService.stop(); 
         console.log(response);
         this.res = response;
-        this.router.navigate(['/'])
+        if(this.res.message){
+        this.router.navigate(['/home']);
+      Swal.fire({
+        title:this.res.message,
+        type:"success",
+        showConfirmButton:false,
+        timer:2000,
+  
+
+      });};
         
       },
       (error) => {console.log(error),
-      this.router.navigate(['/'])},
+        this.ngxService.stop(); }
+     
 
-
+ 
     );
 
+ }
+
+ ngOnDestroy(){
+  if (this.subscription){
+  this.subscription.unsubscribe();}
  }
 
 
