@@ -1,24 +1,6 @@
 input.ng-invalid.ng-touched{
     border:2px solid red;
 }
-/* 
-.mybutton{
-    
-    padding:6px 20px ;
-    border:2px solid black;
-    background-color: transparent;
-    color:black;
-    
-    
-
-} */
-
-/* .mybutton:hover{
-    background-color: green;
-    color:white;
-    border:2px solid green; 
-
-} */
 
 .btn-dialog-close{
     background-color: transparent;

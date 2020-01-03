@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { AuthServiceService } from '../services/auth-service.service';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-change-password',
@@ -24,11 +25,17 @@ export class ChangePasswordComponent implements OnInit {
     private route: Router,
     private ngxService: NgxUiLoaderService,
     private authService: AuthServiceService,
-    
+    private dialogRef:MatDialogRef<ChangePasswordComponent>,
   ) { }
 
   ngOnInit() {
   }
+   
+  onClose(){
+    this.dialogRef.close();
+   
+  }
+
 
   logoutAllDevices() {
     this.serverService.logoutAllDevices()
@@ -60,7 +67,7 @@ export class ChangePasswordComponent implements OnInit {
     this.serverService
       .changePassword(value.oldP, value.newP, value.confirmP)
       .subscribe(
-        (response) => {
+        (response) => {this.onClose();
           this.ngxService.stop();
           
           this.resp = response;

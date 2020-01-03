@@ -6,7 +6,7 @@ import { AuthServiceService } from './auth-service.service';
 
 @Injectable()
 export class ServerService{
-    private rootUrl = "https://b52fbce6.ngrok.io";
+    private rootUrl = "http://localhost:8080";
     body:{};
 
 
