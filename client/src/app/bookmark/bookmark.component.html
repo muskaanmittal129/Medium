@@ -1,0 +1,85 @@
+
+<ngx-ui-loader></ngx-ui-loader>
+<div class="container-fluid" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ">
+   <div class="row">
+      <div class="col-md-8">
+
+
+
+        
+           
+          
+
+            <div *ngFor="let blog of blog; index as i; ">
+               
+              
+                 
+                
+                  
+                  <a style="cursor: pointer;"
+                  [routerLink] = "['/description', array[i]]" 
+                               routerLinkActive = "active"
+                
+                  >
+   
+                  <div class="row" style="margin-bottom: 50px;">
+                     <div class="col-md-9">
+                       
+                       
+                        <div class="pull-left">
+                               <a  ><h3 class="list-group-item-heading" style="color:black;
+                                opacity: .9; font-size:1.5em; font-weight:600 ">{{blog.title}}</h3></a>
+                               <p  *ngIf="blog.subTitle"
+                                class="list-group-item-text"
+                                 style="color:black;
+                                 font-size:1.0.9em;
+                                  opacity: .6">{{blog.subTitle}}</p><br>
+                               <p
+                                class="list-group-item-text"
+                                 style="color:black;  opacity: .8">{{blog.publisher}}</p>
+                               <p class="list-group-item-text" style="color:black; opacity: .6">{{blog.date}}</p>
+                               <p class="list-group-item-text" style="color:black; opacity: .6">{{blog.time}} mins read <span class="glyphicon glyphicon-star"></span></p>
+                             
+        
+                           </div>  
+                     </div>
+                 
+                 
+        
+                 
+                     <div class="col-md-3">
+                          <span class="pull-right">
+                            <img
+                            
+                             [src]="blog.imagePath"
+                             alt="" class="img-responsive"
+                             
+                              >
+                        </span>
+                      </div>
+                      </div>
+                      </a>
+   
+              
+
+               
+            </div>
+            
+
+
+           
+            
+       </div>
+     </div>
+ </div>
+                   
+
+
+                                      
+                                              
+                                     
+                                                      
+                                                  
+                                              
+      
+ 

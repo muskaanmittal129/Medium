@@ -1,0 +1,20 @@
+input.ng-invalid.ng-touched{
+    border:2px solid red;
+}
+
+.btn-dialog-close{
+    background-color: transparent;
+    border:none;
+    outline: none;
+    width:35px;
+    
+    
+}
+.mybtn{background-color: transparent;
+      border:none;}
+.mybtn:focus {outline:none !important}
+
+.has-error{
+    border:2px solid red;
+
+}

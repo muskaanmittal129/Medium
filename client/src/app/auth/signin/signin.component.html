@@ -1,0 +1,90 @@
+
+
+<div style="float:right; ">
+    <button class="btn-dialog-close"
+    (click)="onClose()" tabIndex="-1">
+     <span style="font-size: 1.4em; opacity: 0.4;">X</span></button>
+</div>
+
+
+<div class="row" style="font-family: 'Times New Roman', Times, serif">
+    
+        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <h1 style="text-align: center;">Welcome Back</h1>
+            <p 
+            style="text-align: center; font-size:1.4em; opacity:0.8">
+            Sign in to get personalized story recommendations,
+                 follow authors and topics you love, and interact with stories.</p>
+            
+
+
+            <form style="opacity:0.8" (ngSubmit)="onSignin(f)" #f="ngForm">
+              
+
+
+                <div class="form-group">
+                        <label for="username"> Username</label>
+                        <input type="text"
+                         id="username"
+                          class="form-control"
+                          name ="username"
+                          ngModel
+                          required
+                          #username = "ngModel">
+                          <span
+                          class="help-block"
+                          *ngIf="!username.valid && username.touched"
+                          style="color:red">Enter a valid Username</span>
+                </div>
+
+
+                
+
+
+                <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password"
+                         id="password"
+                          class="form-control"
+                          name ="password"
+                          ngModel
+                          required
+                          #password = "ngModel">
+                         <span
+                          class="help-block"
+                          *ngIf="password.touched && password.errors?.required"
+                          style="color:red">Password is required</span> 
+                </div>
+
+
+
+               
+
+                <div style="text-align: center"><button class="btn btn-success "
+                [disabled]="!f.valid"
+                type="submit" class="btn btn-success">SignIn</button></div>
+
+
+                
+                         
+                        
+               
+            </form>
+            <p style="text-align:center; margin-top:10px; opacity:0.9">No account ? 
+                 <button class="mybtn"
+                 style="background-color: transparent;
+                      border:0px solid transparent;"
+                       (click)="navigateToSignup()">
+                       <span style="color: #00b33c;text-decoration: none;  "><b>Create one</b></span></button> </p><br>
+
+                       <p style="font-size: 1.1em; opacity:0.9; text-align: center; ">To make Medium work, we log user data and share it with service providers.
+                            Click “Sign in” above to accept Medium’s 
+                            <span style="text-align: center;  "><a>Terms of Service</a> & <a>Privacy Policy</a>.</span></p>
+
+        </div>
+
+       
+        
+    
+</div>
+

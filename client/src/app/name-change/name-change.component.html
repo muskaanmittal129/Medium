@@ -1,0 +1,67 @@
+<ngx-ui-loader></ngx-ui-loader>
+<div style="float:right ">
+        <button class="btn-dialog-close"
+        (click)="onClose()" tabIndex="-1">
+         <span style="font-size: 1.4em; opacity: 0.4;">X</span></button>
+</div>
+
+
+<form  class="form" (ngSubmit) = "onChangeName(f)" #f="ngForm">
+            
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="form-group">
+          <label for="fname">First Name</label>
+          <input
+          
+          type="text"
+          id="fname"
+          name="fname"
+          class="form-control"
+          ngModel
+          pattern="[a-zA-Z ]*"
+          
+          required
+          #fname="ngModel">
+          <span
+          class="help-block"
+          *ngIf="!fname.valid && fname.touched"
+          style="color: red;">First Name is required</span>
+
+          <label for="lname">Last Name</label>
+          <input
+          
+          type="text"
+          id="lname"
+          name="lname"
+          class="form-control"
+          ngModel
+          pattern="[a-zA-Z ]*"
+          
+          
+          required
+          #lname="ngModel">
+          <span
+          class="help-block"
+          *ngIf="!lname.valid && lname.touched"
+          style="color: red;">Last Name is required</span>
+
+
+          
+
+         
+          
+        </div>
+      </div>
+    </div>
+
+    <div >
+    <button
+    type="submit"
+    class="btn btn-success"
+    [disabled]="!f.valid" >Change Name</button>
+  </div>
+   
+
+</form>
+

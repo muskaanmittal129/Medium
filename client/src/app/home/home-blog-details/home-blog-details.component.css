@@ -1,0 +1,17 @@
+.bookmark-regular{
+    background-image: url(../../../assets/images/bookmark-regular.svg);
+    height:4vh;
+    width: 5vh;
+    background-repeat: no-repeat;
+    background-color: white;
+    border: none;
+}
+
+.bookmark-solid{
+    background-image: url(../../../assets/images/bookmark-solid.svg);
+    height:4vh;
+    width: 5vh;
+    background-repeat: no-repeat;
+    background-color: white;
+    border: none;
+}
